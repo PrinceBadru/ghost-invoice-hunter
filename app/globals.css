@@ -1,1 +1,86 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary: #0f172a; /* Navy/Dark Blue */
+  --color-primary-hover: #1e293b;
+  
+  --color-success: #16a34a; /* Green */
+  --color-success-bg: #dcfce7;
+  --color-success-border: #86efac;
+  
+  --color-warning: #d97706; /* Amber/Yellow */
+  --color-warning-bg: #fef3c7;
+  --color-warning-border: #fde047;
+  
+  --color-error: #dc2626; /* Red */
+  --color-error-bg: #fee2e2;
+  --color-error-border: #fca5a5;
+  
+  --color-info: #2563eb; /* Blue */
+  --color-info-bg: #dbeafe;
+  --color-info-border: #93c5fd;
+  
+  --color-neutral: #64748b; /* Gray */
+  --color-neutral-bg: #f1f5f9;
+  --color-neutral-border: #cbd5e1;
+
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-neutral-bg text-primary font-sans antialiased;
+  }
+  
+  h1 { @apply text-3xl font-bold mb-24; }
+  h2 { @apply text-2xl font-semibold mb-16; }
+  h3 { @apply text-xl font-medium mb-12; }
+  
+  table { @apply w-full text-left border-collapse; }
+  th { @apply font-medium text-neutral border-b border-neutral-border p-12; }
+  td { @apply border-b border-neutral-border p-12; }
+  
+  th.numeric, td.numeric { @apply text-right; }
+  th.status, td.status { @apply text-center; }
+  th.actions, td.actions { @apply text-right; }
+}
+
+@layer components {
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center px-16 py-8 rounded-md font-medium transition-colors;
+  }
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary-hover;
+  }
+  .btn-secondary {
+    @apply bg-white border border-neutral-border text-primary hover:bg-neutral-bg;
+  }
+  .btn-destructive {
+    @apply bg-error text-white hover:bg-red-700;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white border border-neutral-border rounded-lg shadow-sm p-24;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center px-8 py-4 rounded-full text-xs font-medium border;
+  }
+  .badge-success { @apply bg-success-bg text-success border-success-border; }
+  .badge-warning { @apply bg-warning-bg text-warning border-warning-border; }
+  .badge-error { @apply bg-error-bg text-error border-error-border; }
+  .badge-info { @apply bg-info-bg text-info border-info-border; }
+  .badge-neutral { @apply bg-neutral-bg text-neutral border-neutral-border; }
+}

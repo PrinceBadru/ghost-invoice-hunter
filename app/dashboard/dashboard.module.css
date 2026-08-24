@@ -1,0 +1,180 @@
+.dashboardContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24);
+  padding: var(--spacing-24);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: var(--spacing-16);
+}
+
+@media (min-width: 768px) {
+  .metricsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .metricsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.metricCard {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.metricCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.metricLabel {
+  font-size: 0.875rem;
+  color: var(--color-neutral);
+  margin-bottom: var(--spacing-8);
+}
+
+.metricValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-8);
+}
+
+.metricSubtext {
+  font-size: 0.75rem;
+  color: var(--color-neutral);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+.trendPositive {
+  color: var(--color-error); /* High risk is bad, so error color */
+}
+
+.trendNegative {
+  color: var(--color-success);
+}
+
+.chartContainer {
+  height: 300px;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-16);
+  padding-top: var(--spacing-24);
+  position: relative;
+}
+
+.chartBar {
+  flex: 1;
+  background: linear-gradient(180deg, rgba(220, 38, 38, 0.2) 0%, rgba(220, 38, 38, 0) 100%);
+  border-top: 2px solid var(--color-error);
+  border-radius: 4px 4px 0 0;
+  transition: height 0.5s ease;
+  min-height: 20px;
+  position: relative;
+}
+
+.chartBar:hover {
+  background: linear-gradient(180deg, rgba(220, 38, 38, 0.3) 0%, rgba(220, 38, 38, 0) 100%);
+}
+
+.chartLabel {
+  position: absolute;
+  bottom: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  color: var(--color-neutral);
+}
+
+.chartTooltip {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-primary);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.chartBar:hover .chartTooltip {
+  opacity: 1;
+}
+
+.twoColumnGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-24);
+}
+
+@media (min-width: 1024px) {
+  .twoColumnGrid {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.tableRow {
+  transition: background-color 0.1s ease;
+}
+
+.tableRow:hover {
+  background-color: var(--color-neutral-bg);
+}
+
+.tableAction {
+  color: var(--color-info);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.tableAction:hover {
+  text-decoration: underline;
+}
+
+.recentItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-12) 0;
+  border-bottom: 1px solid var(--color-neutral-border);
+}
+
+.recentItem:last-child {
+  border-bottom: none;
+}
+
+.recentItemDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.recentItemId {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.recentItemDesc {
+  font-size: 0.875rem;
+  color: var(--color-neutral);
+}
+
+.recentItemTime {
+  font-size: 0.75rem;
+  color: var(--color-neutral);
+}
