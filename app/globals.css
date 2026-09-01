@@ -1,86 +1,100 @@
 @import "tailwindcss";
 
-@theme {
-  --color-primary: #0f172a; /* Navy/Dark Blue */
-  --color-primary-hover: #1e293b;
-  
-  --color-success: #16a34a; /* Green */
-  --color-success-bg: #dcfce7;
-  --color-success-border: #86efac;
-  
-  --color-warning: #d97706; /* Amber/Yellow */
-  --color-warning-bg: #fef3c7;
-  --color-warning-border: #fde047;
-  
-  --color-error: #dc2626; /* Red */
-  --color-error-bg: #fee2e2;
-  --color-error-border: #fca5a5;
-  
-  --color-info: #2563eb; /* Blue */
-  --color-info-bg: #dbeafe;
-  --color-info-border: #93c5fd;
-  
-  --color-neutral: #64748b; /* Gray */
-  --color-neutral-bg: #f1f5f9;
-  --color-neutral-border: #cbd5e1;
-
-  --spacing-4: 4px;
-  --spacing-8: 8px;
-  --spacing-12: 12px;
-  --spacing-16: 16px;
-  --spacing-24: 24px;
-  --spacing-32: 32px;
-  --spacing-48: 48px;
-  --spacing-64: 64px;
-
-  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
-
 @layer base {
-  body {
-    @apply bg-neutral-bg text-primary font-sans antialiased;
+  /* Default Theme: Signal (Light Mode) */
+  :root {
+    --bg-app: #F5F7FA;
+    --bg-surface: #FFFFFF;
+    --bg-surface-alt: #F8FAFC;
+    --color-primary: #315CFF;
+    --color-primary-hover: #264FE6;
+    --color-primary-soft: #E8EDFF;
+    --text-primary: #172033;
+    --text-secondary: #64748B;
+    --text-muted: #94A3B8;
+    --border-color: #E2E8F0;
+
+    /* Fixed Semantic Tokens across themes */
+    --success: #168A5B;
+    --success-soft: #E8F7F0;
+    --warning: #C98200;
+    --warning-soft: #FFF5DD;
+    --danger: #D64545;
+    --danger-soft: #FDECEC;
+    --info: #4C6FFF;
+    --info-soft: #EDF1FF;
+    --insight: #8B5CF6;
+    --insight-soft: #F2EDFF;
   }
-  
-  h1 { @apply text-3xl font-bold mb-24; }
-  h2 { @apply text-2xl font-semibold mb-16; }
-  h3 { @apply text-xl font-medium mb-12; }
-  
-  table { @apply w-full text-left border-collapse; }
-  th { @apply font-medium text-neutral border-b border-neutral-border p-12; }
-  td { @apply border-b border-neutral-border p-12; }
-  
-  th.numeric, td.numeric { @apply text-right; }
-  th.status, td.status { @apply text-center; }
-  th.actions, td.actions { @apply text-right; }
+
+  /* Signal (Dark Mode) */
+  .dark {
+    --bg-app: #0B1020;
+    --bg-surface: #111827;
+    --bg-surface-alt: #172033;
+    --color-primary: #315CFF;
+    --color-primary-hover: #264FE6;
+    --color-primary-soft: #18264F;
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    --border-color: #263247;
+
+    --success-soft: #08291B;
+    --warning-soft: #2B1D00;
+    --danger-soft: #331010;
+    --info-soft: #111B3D;
+    --insight-soft: #22143D;
+  }
+
+  /* Theme Overrides: Midnight (Dark Only) */
+  [data-theme="midnight"].dark {
+    --bg-app: #080B12;
+    --bg-surface: #10151F;
+    --bg-surface-alt: #151C28;
+    --color-primary: #5B7CFF;
+    --color-primary-hover: #7692FF;
+    --color-primary-soft: #18264F;
+    --text-primary: #F8FAFC;
+    --text-secondary: #9AA7BA;
+    --text-muted: #667085;
+    --border-color: #222B3A;
+  }
+
+  /* Theme Overrides: Aurora (Dark Only) */
+  [data-theme="aurora"].dark {
+    --bg-app: #080A18;
+    --bg-surface: #101329;
+    --bg-surface-alt: #151A36;
+    --color-primary: #7C5CFF;
+    --color-primary-hover: #9275FF;
+    --color-primary-soft: #21194A;
+    --text-primary: #F8FAFC;
+    --text-secondary: #A5B4FC;
+    --text-muted: #717B9B;
+    --border-color: #282D4A;
+  }
+
+  /* Theme Overrides: Slate (Light Only) */
+  [data-theme="slate"] {
+    --bg-app: #F4F6F8;
+    --bg-surface: #FFFFFF;
+    --bg-surface-alt: #F8FAFC;
+    --color-primary: #475569;
+    --color-primary-hover: #334155;
+    --color-primary-soft: #E2E8F0;
+    --text-primary: #1E293B;
+    --text-secondary: #64748B;
+    --text-muted: #94A3B8;
+    --border-color: #CBD5E1;
+  }
 }
 
-@layer components {
-  /* Buttons */
-  .btn {
-    @apply inline-flex items-center justify-center px-16 py-8 rounded-md font-medium transition-colors;
-  }
-  .btn-primary {
-    @apply bg-primary text-white hover:bg-primary-hover;
-  }
-  .btn-secondary {
-    @apply bg-white border border-neutral-border text-primary hover:bg-neutral-bg;
-  }
-  .btn-destructive {
-    @apply bg-error text-white hover:bg-red-700;
-  }
-
-  /* Cards */
-  .card {
-    @apply bg-white border border-neutral-border rounded-lg shadow-sm p-24;
-  }
-
-  /* Badges */
-  .badge {
-    @apply inline-flex items-center px-8 py-4 rounded-full text-xs font-medium border;
-  }
-  .badge-success { @apply bg-success-bg text-success border-success-border; }
-  .badge-warning { @apply bg-warning-bg text-warning border-warning-border; }
-  .badge-error { @apply bg-error-bg text-error border-error-border; }
-  .badge-info { @apply bg-info-bg text-info border-info-border; }
-  .badge-neutral { @apply bg-neutral-bg text-neutral border-neutral-border; }
+body {
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-inter), sans-serif;
 }
+
+.font-display { font-family: var(--font-space-grotesk), sans-serif; }
+.font-mono { font-family: var(--font-jetbrains-mono), monospace; }
