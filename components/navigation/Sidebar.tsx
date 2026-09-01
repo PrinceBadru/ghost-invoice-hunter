@@ -11,15 +11,15 @@ export const Sidebar = () => {
   const navGroups = [
     {
       title: "OVERVIEW",
-      items: [{ label: "Dashboard", href: "/dashboard", icon: LayoutDashboard }]
+      items: [{ label: "Dashboard", href: "/", icon: LayoutDashboard }]
     },
     {
       title: "WORK",
       items: [
-        { label: "Invoices", href: "/invoices", icon: FileText },
-        { label: "Discrepancies", href: "/discrepancies", icon: AlertOctagon },
-        { label: "Purchase Orders", href: "/purchase-orders", icon: ShoppingCart },
-        { label: "Quotes", href: "/quotes", icon: Quote }
+        { label: "Invoices", href: "app/invoices/[id]/page.tsx", icon: FileText },
+        { label: "Discrepancies", href: "app/discrepancies/page.tsx", icon: AlertOctagon },
+        { label: "Purchase Orders", href: "app/purchase-orders/page.tsx", icon: ShoppingCart },
+        { label: "Quotes", href: "app/quotes/page.tsx", icon: Quote }
       ]
     },
     {
