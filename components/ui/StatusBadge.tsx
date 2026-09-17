@@ -1,42 +1,48 @@
 import React from "react";
-import { CheckCircle2, AlertTriangle, AlertOctagon, Clock, Archive, FileText, XCircle } from "lucide-react";
+import { CheckCircle2, AlertTriangle, XCircle, Loader2 } from "lucide-react";
+import type { DocStatus, Severity } from "@/lib/types";
 
-export type InvoiceStatus = "Draft" | "Processing" | "Matched" | "Needs Review" | "Discrepancy" | "Approved" | "Rejected" | "Archived";
-export type Severity = "Low" | "Medium" | "High" | "Critical";
+const STATUS_STYLES: Record<string, { bg: string; fg: string; icon: React.ElementType }> = {
+  Matched: { bg: "var(--success-soft)", fg: "var(--success)", icon: CheckCircle2 },
+  "Needs Review": { bg: "var(--warning-soft)", fg: "var(--warning)", icon: AlertTriangle },
+  Discrepancy: { bg: "var(--danger-soft)", fg: "var(--danger)", icon: XCircle },
+  Processing: { bg: "var(--info-soft)", fg: "var(--info)", icon: Loader2 },
+  Failed: { bg: "var(--danger-soft)", fg: "var(--danger)", icon: XCircle },
+};
 
-interface StatusBadgeProps {
-  status: InvoiceStatus;
-  severity?: Severity;
-}
+const SEVERITY_STYLES: Record<string, string> = {
+  Low: "var(--success)",
+  Medium: "var(--warning)",
+  High: "var(--danger)",
+};
 
-export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, severity }) => {
-  const getStatusConfig = () => {
-    switch (status) {
-      case "Matched":
-      case "Approved":
-        return { icon: CheckCircle2, bg: "var(--success-soft)", color: "var(--success)" };
-      case "Needs Review":
-        return { icon: AlertTriangle, bg: "var(--warning-soft)", color: "var(--warning)" };
-      case "Discrepancy":
-      case "Rejected":
-        return { icon: AlertOctagon, bg: "var(--danger-soft)", color: "var(--danger)" };
-      case "Processing":
-        return { icon: Clock, bg: "var(--info-soft)", color: "var(--info)" };
-      default:
-        return { icon: FileText, bg: "var(--bg-surface-alt)", color: "var(--text-secondary)" };
-    }
-  };
-
-  const { icon: Icon, bg, color } = getStatusConfig();
+export function StatusBadge({
+  status,
+  severity,
+}: {
+  status: DocStatus | string;
+  severity?: Severity | string | null;
+}) {
+  const style = STATUS_STYLES[status] ?? STATUS_STYLES.Processing;
+  const Icon = style.icon;
 
   return (
-    <div 
-      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border"
-      style={{ backgroundColor: bg, borderColor: color, color }}
-    >
-      <Icon className="w-3.5 h-3.5 shrink-0" />
-      <span>{status}</span>
-      {severity && <span className="opacity-75 text-[10px] uppercase font-bold ml-1">({severity})</span>}
-    </div>
+    <span className="inline-flex items-center gap-1.5">
+      <span
+        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold"
+        style={{ backgroundColor: style.bg, color: style.fg }}
+      >
+        <Icon className="w-3 h-3" />
+        {status}
+      </span>
+      {severity && (
+        <span
+          className="text-[10px] font-mono font-medium"
+          style={{ color: SEVERITY_STYLES[severity] ?? "var(--text-muted)" }}
+        >
+          {severity}
+        </span>
+      )}
+    </span>
   );
-};
+}

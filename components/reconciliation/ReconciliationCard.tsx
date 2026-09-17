@@ -1,86 +1,54 @@
 import React from "react";
-import { CheckCircle2, AlertTriangle, ArrowRight } from "lucide-react";
 
-interface ReconciliationProps {
-  quoteAmount: number;
-  poAmount: number;
-  invoiceAmount: number;
-  currency?: string;
-}
-
-export const ReconciliationCard: React.FC<ReconciliationProps> = ({
+// Three-way visual comparison of quote → PO → invoice amounts, used on the
+// dashboard and on the invoice drill-down page.
+export function ReconciliationCard({
   quoteAmount,
   poAmount,
   invoiceAmount,
-  currency = "$",
-}) => {
-  const isPoMatch = quoteAmount === poAmount;
-  const isInvoiceMatch = poAmount === invoiceAmount;
-  const difference = invoiceAmount - poAmount;
-  const variancePercentage = ((difference / poAmount) * 100).toFixed(2);
-  const isDiscrepancy = difference !== 0;
+}: {
+  quoteAmount: number;
+  poAmount: number;
+  invoiceAmount: number;
+}) {
+  const max = Math.max(quoteAmount, poAmount, invoiceAmount, 1);
+  const variance = invoiceAmount - poAmount;
+  const variancePercent = poAmount !== 0 ? (variance / poAmount) * 100 : 0;
+  const flagged = Math.abs(variancePercent) > 0.01;
+
+  const rows = [
+    { label: "Quote", value: quoteAmount, color: "var(--insight)" },
+    { label: "Purchase Order", value: poAmount, color: "var(--color-primary)" },
+    { label: "Invoice", value: invoiceAmount, color: flagged ? "var(--danger)" : "var(--success)" },
+  ];
 
   return (
-    <div className="p-6 rounded-xl border bg-[var(--bg-surface)] border-[var(--border-color)]">
-      <div className="text-xs font-semibold text-[var(--text-muted)] tracking-wider uppercase mb-4">
-        Reconciliation Pipeline
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-        {/* Quote */}
-        <div className="p-3 rounded-lg bg-[var(--bg-surface-alt)] border border-[var(--border-color)]">
-          <span className="text-xs text-[var(--text-muted)] block">QUOTE</span>
-          <span className="text-base font-mono font-semibold text-[var(--text-primary)]">
-            {currency}{quoteAmount.toLocaleString()}
-          </span>
-          <div className="mt-2 flex items-center text-xs text-[var(--success)]">
-            <CheckCircle2 className="w-4 h-4 mr-1" /> Validated
-          </div>
-        </div>
-
-        {/* Purchase Order */}
-        <div className="p-3 rounded-lg bg-[var(--bg-surface-alt)] border border-[var(--border-color)]">
-          <span className="text-xs text-[var(--text-muted)] block">PURCHASE ORDER</span>
-          <span className="text-base font-mono font-semibold text-[var(--text-primary)]">
-            {currency}{poAmount.toLocaleString()}
-          </span>
-          <div className="mt-2 flex items-center text-xs" style={{ color: isPoMatch ? "var(--success)" : "var(--warning)" }}>
-            {isPoMatch ? <CheckCircle2 className="w-4 h-4 mr-1" /> : <AlertTriangle className="w-4 h-4 mr-1" />}
-            {isPoMatch ? "Matched" : "PO Variance"}
-          </div>
-        </div>
-
-        {/* Invoice */}
-        <div className="p-3 rounded-lg bg-[var(--bg-surface-alt)] border border-[var(--border-color)]">
-          <span className="text-xs text-[var(--text-muted)] block">INVOICE</span>
-          <span className="text-base font-mono font-semibold text-[var(--text-primary)]">
-            {currency}{invoiceAmount.toLocaleString()}
-          </span>
-          <div className="mt-2 flex items-center text-xs" style={{ color: isInvoiceMatch ? "var(--success)" : "var(--danger)" }}>
-            {isInvoiceMatch ? <CheckCircle2 className="w-4 h-4 mr-1" /> : <AlertTriangle className="w-4 h-4 mr-1" />}
-            {isInvoiceMatch ? "Matched" : "Discrepancy"}
-          </div>
-        </div>
-      </div>
-
-      {/* Discrepancy Breakdown Footer */}
-      {isDiscrepancy && (
-        <div className="mt-6 pt-4 border-t border-[var(--border-color)] flex flex-wrap justify-between items-center gap-4">
-          <div>
-            <div className="text-xs text-[var(--text-muted)]">Variance Details</div>
-            <div className="text-sm font-mono font-semibold text-[var(--danger)]">
-              Difference: {difference > 0 ? "+" : ""}{currency}{difference.toLocaleString()} ({difference > 0 ? "+" : ""}{variancePercentage}%)
+    <div className="p-5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] space-y-4">
+      <div className="space-y-3">
+        {rows.map((row) => (
+          <div key={row.label} className="space-y-1">
+            <div className="flex justify-between text-xs font-mono">
+              <span className="text-[var(--text-secondary)]">{row.label}</span>
+              <span className="font-semibold text-[var(--text-primary)]">
+                ${row.value.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+              </span>
+            </div>
+            <div className="w-full h-2 rounded-full bg-[var(--bg-surface-alt)] overflow-hidden">
+              <div
+                className="h-full rounded-full"
+                style={{ width: `${(row.value / max) * 100}%`, backgroundColor: row.color }}
+              />
             </div>
           </div>
-          <div 
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold"
-            style={{ backgroundColor: "var(--danger-soft)", color: "var(--danger)" }}
-          >
-            <AlertTriangle className="w-4 h-4" />
-            <span>PRICE DISCREPANCY DETECTED</span>
-          </div>
-        </div>
-      )}
+        ))}
+      </div>
+      <div className="flex items-center justify-between pt-3 border-t border-[var(--border-color)] text-xs font-mono">
+        <span className="text-[var(--text-muted)] uppercase">Invoice vs PO Variance</span>
+        <span className={`font-bold ${flagged ? "text-[var(--danger)]" : "text-[var(--success)]"}`}>
+          {variance >= 0 ? "+" : ""}
+          ${variance.toLocaleString("en-US", { minimumFractionDigits: 2 })} ({variancePercent.toFixed(2)}%)
+        </span>
+      </div>
     </div>
   );
-};
+}

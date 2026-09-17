@@ -1,0 +1,16 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3001:3000"
+    environment:
+      # Use an absolute path inside the persistent volume for SQLite
+      - DATABASE_URL=file:/app/data/sqlite.db
+      # Add other necessary env vars here, for example:
+      - JWT_SECRET=dev-secret-change-me-before-production
+    volumes:
+      - app-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  app-data:

@@ -1,46 +1,31 @@
 import React from "react";
-import { Sparkles } from "lucide-react";
+import Link from "next/link";
+import { Sparkles, ArrowRight } from "lucide-react";
 
-interface SystemInsightProps {
-  title: string;
-  description: string;
-  actionText?: string;
-  onAction?: () => void;
-}
-
-export const SystemInsight: React.FC<SystemInsightProps> = ({
+export function SystemInsight({
   title,
   description,
   actionText,
-  onAction,
-}) => {
+  actionHref = "/discrepancies",
+}: {
+  title: string;
+  description: string;
+  actionText: string;
+  actionHref?: string;
+}) {
   return (
-    <div 
-      className="p-4 rounded-xl border flex gap-3 items-start"
-      style={{ 
-        backgroundColor: "var(--insight-soft)", 
-        borderColor: "var(--insight)",
-        color: "var(--text-primary)" 
-      }}
-    >
-      <Sparkles className="w-5 h-5 shrink-0 mt-0.5" style={{ color: "var(--insight)" }} />
-      <div className="space-y-1">
-        <span className="text-xs font-semibold tracking-wider uppercase block" style={{ color: "var(--insight)" }}>
-          ✦ System Insight
-        </span>
-        <h4 className="text-sm font-semibold">{title}</h4>
-        <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{description}</p>
-        
-        {actionText && (
-          <button
-            onClick={onAction}
-            className="mt-2 text-xs font-medium underline underline-offset-4 hover:opacity-80 transition-opacity"
-            style={{ color: "var(--insight)" }}
-          >
-            [{actionText}]
-          </button>
-        )}
+    <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--insight-soft)] space-y-3">
+      <div className="flex items-center gap-2">
+        <Sparkles className="w-4 h-4 text-[var(--insight)]" />
+        <h4 className="text-xs font-semibold text-[var(--text-primary)]">{title}</h4>
       </div>
+      <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{description}</p>
+      <Link
+        href={actionHref}
+        className="inline-flex items-center gap-1 text-xs font-medium text-[var(--insight)] hover:underline"
+      >
+        {actionText} <ArrowRight className="w-3 h-3" />
+      </Link>
     </div>
   );
-};
+}

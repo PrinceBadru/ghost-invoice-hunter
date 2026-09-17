@@ -2,92 +2,102 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { LayoutDashboard, FileText, AlertOctagon, ShoppingCart, Quote, Users, Building2, BarChart3, History, Settings } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  LayoutDashboard,
+  FileText,
+  ShoppingCart,
+  Quote,
+  AlertTriangle,
+  Building2,
+  BarChart3,
+  Users,
+  History,
+  Settings,
+  Upload,
+  LogOut,
+  Ghost,
+} from "lucide-react";
 
-export const Sidebar = () => {
+const NAV_ITEMS = [
+  { href: "/", label: "Command Center", icon: LayoutDashboard },
+  { href: "/upload", label: "Process Invoices", icon: Upload },
+  { href: "/invoices", label: "Invoices", icon: FileText },
+  { href: "/purchase-orders", label: "Purchase Orders", icon: ShoppingCart },
+  { href: "/quotes", label: "Quotes", icon: Quote },
+  { href: "/discrepancies", label: "Discrepancies", icon: AlertTriangle },
+  { href: "/vendors", label: "Vendors", icon: Building2 },
+  { href: "/reports", label: "Reports", icon: BarChart3 },
+  { href: "/team", label: "Team", icon: Users },
+  { href: "/audit-log", label: "Audit Log", icon: History },
+  { href: "/settings", label: "Settings", icon: Settings },
+];
+
+export function Sidebar({
+  environmentName,
+  userName,
+  userRole,
+}: {
+  environmentName: string;
+  userName: string;
+  userRole: string;
+}) {
   const pathname = usePathname();
+  const router = useRouter();
 
-  const navGroups = [
-    {
-      title: "OVERVIEW",
-      items: [{ label: "Dashboard", href: "/", icon: LayoutDashboard }]
-    },
-    {
-      title: "WORK",
-      items: [
-        { label: "Invoices", href: "/invoices", icon: FileText },
-        { label: "Discrepancies", href: "/discrepancies", icon: AlertOctagon },
-        { label: "Purchase Orders", href: "/purchase-orders", icon: ShoppingCart },
-        { label: "Quotes", href: "/quotes", icon: Quote }
-      ]
-    },
-    {
-      title: "MANAGEMENT",
-      items: [
-        { label: "Vendors", href: "/vendors", icon: Building2 },
-        { label: "Team", href: "/team", icon: Users }
-      ]
-    },
-    {
-      title: "REPORTING",
-      items: [
-        { label: "Reports", href: "/reports", icon: BarChart3 },
-        { label: "Audit Log", href: "/audit-log", icon: History }
-      ]
-    },
-    {
-      title: "SYSTEM",
-      items: [{ label: "Settings", href: "/settings", icon: Settings }]
-    }
-  ];
+  async function handleLogout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
+    router.refresh();
+  }
 
   return (
-    <aside className="w-64 border-r border-[var(--border-color)] bg-[var(--bg-surface)] min-h-screen p-4 flex flex-col justify-between shrink-0">
-      <div className="space-y-6">
-        {/* Brand */}
-        <div className="px-3 py-2">
-          <div className="font-display font-bold text-base tracking-tight text-[var(--text-primary)]">
-            GHOST INVOICE
-          </div>
-          <div className="text-[11px] font-mono uppercase text-[var(--text-muted)] tracking-widest">
-            Hunter v1.0
-          </div>
+    <aside className="w-64 shrink-0 border-r border-[var(--border-color)] bg-[var(--bg-surface)] flex flex-col">
+      <div className="p-5 border-b border-[var(--border-color)]">
+        <div className="flex items-center gap-2">
+          <Ghost className="w-5 h-5 text-[var(--color-primary)]" />
+          <span className="font-display font-bold text-sm text-[var(--text-primary)]">
+            Ghost Invoice Hunter
+          </span>
         </div>
-
-        {/* Navigation Categories */}
-        <nav className="space-y-4">
-          {navGroups.map((group, idx) => (
-            <div key={idx} className="space-y-1">
-              <div className="px-3 text-[10px] font-semibold text-[var(--text-muted)] tracking-wider uppercase">
-                {group.title}
-              </div>
-              {group.items.map((item) => {
-                const Icon = item.icon;
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium transition-colors ${
-                      isActive
-                        ? "bg-[var(--color-primary-soft)] text-[var(--color-primary)] font-semibold"
-                        : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-alt)]"
-                    }`}
-                  >
-                    <Icon className="w-4 h-4 shrink-0" />
-                    <span>{item.label}</span>
-                  </Link>
-                );
-              })}
-            </div>
-          ))}
-        </nav>
+        <p className="text-[10px] font-mono text-[var(--text-muted)] mt-1 truncate">
+          {environmentName}
+        </p>
       </div>
 
-      <div className="p-3 border-t border-[var(--border-color)] text-[11px] text-[var(--text-muted)] font-mono">
-        Status: <span className="text-[var(--success)]">● Operational</span>
+      <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
+        {NAV_ITEMS.map((item) => {
+          const Icon = item.icon;
+          const active = pathname === item.href;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium transition-colors ${
+                active
+                  ? "bg-[var(--color-primary-soft)] text-[var(--color-primary)]"
+                  : "text-[var(--text-secondary)] hover:bg-[var(--bg-surface-alt)] hover:text-[var(--text-primary)]"
+              }`}
+            >
+              <Icon className="w-4 h-4" />
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="p-3 border-t border-[var(--border-color)] space-y-2">
+        <div className="px-2">
+          <div className="text-xs font-semibold text-[var(--text-primary)] truncate">{userName}</div>
+          <div className="text-[10px] font-mono text-[var(--text-muted)]">{userRole}</div>
+        </div>
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-md text-xs font-medium text-[var(--text-secondary)] hover:bg-[var(--bg-surface-alt)] hover:text-[var(--danger)] transition-colors"
+        >
+          <LogOut className="w-3.5 h-3.5" /> Log out
+        </button>
       </div>
     </aside>
   );
-};
+}
