@@ -2,6 +2,11 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
+  if (process.env.NODE_ENV === "production") {
+    console.log("Skipping seed in production environment.");
+    return;
+  }
+
   const passwordHash = "$2a$10$M0kUXwWYF2jDo2ofzF9qXeKqYjpHw2A05uY.nJlWCDal9nh6YEu1O";
 
   const existing = await prisma.user.findUnique({ where: { email: "sarah@acme.test" } });

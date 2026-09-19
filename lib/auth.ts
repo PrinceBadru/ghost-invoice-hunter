@@ -15,8 +15,10 @@ export interface SessionPayload {
 }
 
 function getSecret() {
-  const secret = process.env.JWT_SECRET || "dev-secret-change-me-before-production";
-  return new TextEncoder().encode(secret);
+  if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET environment variable is not set.");
+  }
+  return new TextEncoder().encode(process.env.JWT_SECRET);
 }
 
 export async function signSession(payload: SessionPayload): Promise<string> {

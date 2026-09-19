@@ -40,7 +40,7 @@ export default async function DiscrepanciesPage() {
         {docs.map((inv) => {
           const d = inv.discrepancies[0];
           const poAmount = d?.poAmount ?? 0;
-          const variance = poAmount ? inv.totalAmount - poAmount : 0;
+          const variance = (poAmount !== null && poAmount !== undefined) ? inv.totalAmount - poAmount : 0;
           const reasons: string[] = d ? JSON.parse(d.reasons) : [];
 
           return (
@@ -69,7 +69,7 @@ export default async function DiscrepanciesPage() {
                 <div>
                   <div className="text-[10px] text-[var(--text-muted)] uppercase">PO Baseline</div>
                   <div className="text-[var(--text-secondary)]">
-                    {poAmount ? `$${poAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })}` : "No PO found"}
+                    {(poAmount !== null && poAmount !== undefined) ? `$${poAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })}` : "No PO found"}
                   </div>
                 </div>
                 <div>
@@ -81,7 +81,7 @@ export default async function DiscrepanciesPage() {
                 <div>
                   <div className="text-[10px] text-[var(--text-muted)] uppercase">Variance</div>
                   <div className="font-bold text-[var(--danger)]">
-                    {poAmount ? `${variance >= 0 ? "+" : ""}$${variance.toLocaleString("en-US", { minimumFractionDigits: 2 })}` : "—"}
+                    {(poAmount !== null && poAmount !== undefined) ? `${variance >= 0 ? "+" : ""}$${variance.toLocaleString("en-US", { minimumFractionDigits: 2 })}` : "—"}
                   </div>
                 </div>
               </div>

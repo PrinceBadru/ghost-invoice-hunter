@@ -8,17 +8,18 @@ export function ReconciliationCard({
   invoiceAmount,
 }: {
   quoteAmount: number;
-  poAmount: number;
+  poAmount: number | null;
   invoiceAmount: number;
 }) {
-  const max = Math.max(quoteAmount, poAmount, invoiceAmount, 1);
-  const variance = invoiceAmount - poAmount;
-  const variancePercent = poAmount !== 0 ? (variance / poAmount) * 100 : 0;
+  const safePoAmount = poAmount ?? 0;
+  const max = Math.max(quoteAmount, safePoAmount, invoiceAmount, 1);
+  const variance = (poAmount !== null && poAmount !== undefined) ? invoiceAmount - poAmount : 0;
+  const variancePercent = (poAmount !== null && poAmount !== undefined && poAmount !== 0) ? (variance / poAmount) * 100 : 0;
   const flagged = Math.abs(variancePercent) > 0.01;
 
   const rows = [
     { label: "Quote", value: quoteAmount, color: "var(--insight)" },
-    { label: "Purchase Order", value: poAmount, color: "var(--color-primary)" },
+    { label: "Purchase Order", value: safePoAmount, color: "var(--color-primary)" },
     { label: "Invoice", value: invoiceAmount, color: flagged ? "var(--danger)" : "var(--success)" },
   ];
 

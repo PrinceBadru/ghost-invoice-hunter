@@ -21,32 +21,38 @@ export async function POST(req: NextRequest) {
   }
   const { environmentName, name, email, password } = parsed.data;
 
-  const existing = await prisma.user.findUnique({ where: { email } });
+  const normalizedEmail = email.toLowerCase();
+
+  const existing = await prisma.user.findUnique({ where: { email: normalizedEmail } });
   if (existing) {
     return NextResponse.json({ error: "An account with that email already exists" }, { status: 409 });
   }
 
   const passwordHash = await hashPassword(password);
 
-  const environment = await prisma.environment.create({
-    data: {
-      name: environmentName,
-      users: {
-        create: { name, email, passwordHash, role: "MASTER" },
+  const { environment, masterUser } = await prisma.$transaction(async (tx) => {
+    const environment = await tx.environment.create({
+      data: {
+        name: environmentName,
+        users: {
+          create: { name, email: normalizedEmail, passwordHash, role: "MASTER" },
+        },
       },
-    },
-    include: { users: true },
-  });
+      include: { users: true },
+    });
 
-  const masterUser = environment.users[0];
+    const masterUser = environment.users[0];
 
-  await prisma.auditLog.create({
-    data: {
-      environmentId: environment.id,
-      userId: masterUser.id,
-      action: `Environment "${environment.name}" created`,
-      reason: `${masterUser.name} signed up as master account`,
-    },
+    await tx.auditLog.create({
+      data: {
+        environmentId: environment.id,
+        userId: masterUser.id,
+        action: `Environment "${environment.name}" created`,
+        reason: `${masterUser.name} signed up as master account`,
+      },
+    });
+
+    return { environment, masterUser };
   });
 
   const token = await signSession({

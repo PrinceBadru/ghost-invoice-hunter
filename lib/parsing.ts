@@ -42,14 +42,28 @@ export function parseSpreadsheet(buffer: Buffer): ParsedDocument {
     const description = String(
       pick(row, ["description", "Description", "item", "Item", "Item Description"]) ?? "Line item"
     );
-    const quantity = Number(pick(row, ["quantity", "Quantity", "qty", "Qty"]) ?? 1) || 1;
-    let unitPrice = Number(
-      pick(row, ["unitPrice", "Unit Price", "unit_price", "price", "Price"]) ?? 0
-    ) || 0;
-    let amount = Number(pick(row, ["amount", "Amount", "total", "Total", "Line Total"]) ?? 0) || 0;
+    
+    let rawQty = pick(row, ["quantity", "Quantity", "qty", "Qty"]);
+    let quantity = Number(rawQty);
+    if (isNaN(quantity)) quantity = 1;
+    if (rawQty === undefined || rawQty === null || rawQty === "") quantity = 1;
 
-    if (!amount && (quantity || unitPrice)) amount = quantity * unitPrice;
-    if (!unitPrice && quantity) unitPrice = amount / quantity;
+    let rawPrice = pick(row, ["unitPrice", "Unit Price", "unit_price", "price", "Price"]);
+    let unitPrice = Number(rawPrice);
+    if (isNaN(unitPrice)) unitPrice = 0;
+    
+    let rawAmount = pick(row, ["amount", "Amount", "total", "Total", "Line Total"]);
+    let amount = Number(rawAmount);
+    if (isNaN(amount)) amount = 0;
+
+    // Only compute if amount isn't explicitly provided but we have qty and price
+    if (!amount && quantity && unitPrice) {
+      amount = quantity * unitPrice;
+    }
+    // If we have amount and qty but no unit price, derive it
+    if (!unitPrice && quantity && amount) {
+      unitPrice = amount / quantity;
+    }
 
     return { description, quantity, unitPrice, amount };
   });

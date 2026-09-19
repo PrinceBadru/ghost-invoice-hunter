@@ -28,7 +28,7 @@ export default async function QuotesPage() {
                 <th className="p-3 font-medium">QUOTE REF</th>
                 <th className="p-3 font-medium">VENDOR</th>
                 <th className="p-3 font-medium text-right">QUOTED AMOUNT</th>
-                <th className="p-3 font-medium">LINKED PO</th>
+                <th className="p-3 font-medium">LINKED QUOTE REF</th>
                 <th className="p-3 font-medium">PIPELINE STATUS</th>
               </tr>
             </thead>
@@ -50,7 +50,7 @@ export default async function QuotesPage() {
                   <td className="p-3 font-mono text-[var(--text-secondary)]">{q.linkedQuoteRef ?? "—"}</td>
                   <td className="p-3">
                     <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-[var(--success)]">
-                      <CheckCircle2 className="w-3.5 h-3.5" /> Approved Baseline
+                      <CheckCircle2 className="w-3.5 h-3.5" /> Approved
                     </span>
                   </td>
                 </tr>

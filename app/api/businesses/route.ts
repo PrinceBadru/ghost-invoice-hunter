@@ -14,6 +14,9 @@ const schema = z.object({
 export async function POST(req: NextRequest) {
   const currentUser = await getCurrentUser();
   if (!currentUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (currentUser.role !== "MASTER" && currentUser.role !== "ADMIN") {
+    return NextResponse.json({ error: "Forbidden: You do not have permission to create businesses." }, { status: 403 });
+  }
 
   const body = await req.json().catch(() => null);
   const parsed = schema.safeParse(body);
