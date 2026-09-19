@@ -6,11 +6,16 @@ import { prisma } from "@/lib/prisma";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ReconciliationCard } from "@/components/reconciliation/ReconciliationCard";
 
-export default async function InvoiceDetailPage({ params }: { params: { id: string } }) {
+export default async function InvoiceDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   const user = await requireUser();
 
   const invoice = await prisma.document.findFirst({
-    where: { id: params.id, environmentId: user.environmentId, type: "INVOICE" },
+    where: { id, environmentId: user.environmentId, type: "INVOICE" },
     include: {
       business: true,
       lineItems: true,
