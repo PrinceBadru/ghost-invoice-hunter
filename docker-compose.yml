@@ -2,12 +2,16 @@ services:
   app:
     build: .
     ports:
-      - "3001:3000"
+      - "3001:3001"
     environment:
       # Use an absolute path inside the persistent volume for SQLite
       - DATABASE_URL=file:/app/data/sqlite.db
-      # Add other necessary env vars here, for example:
-      - JWT_SECRET=dev-secret-change-me-before-production
+      # Pull JWT_SECRET from the host environment (or .env file) instead of hardcoding
+      - JWT_SECRET=${JWT_SECRET}
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /app/.next
     volumes:
       - app-data:/app/data
     restart: unless-stopped

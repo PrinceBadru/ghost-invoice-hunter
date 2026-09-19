@@ -12,6 +12,18 @@ export function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const testAccounts = [
+    { name: "Sarah K.", role: "MASTER", email: "sarah@acme.test" },
+    { name: "Jane A.", role: "ADMIN", email: "jane@acme.test" },
+    { name: "David M.", role: "UPLOADER", email: "david@acme.test" },
+    { name: "Bob V.", role: "VIEWER", email: "bob@acme.test" },
+  ];
+
+  const handleQuickLogin = (email: string) => {
+    setEmail(email);
+    setPassword("password123");
+  };
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -32,7 +44,7 @@ export function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--bg-app)] p-6">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--bg-app)] p-6">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-sm p-6 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] space-y-4"
@@ -81,6 +93,23 @@ export function LoginForm() {
           </Link>
         </p>
       </form>
+
+      <div className="w-full max-w-sm mt-8 space-y-3">
+        <div className="text-sm font-medium text-[var(--text-secondary)] text-center">Test Accounts</div>
+        <div className="grid grid-cols-2 gap-3">
+          {testAccounts.map((acc) => (
+            <button
+              key={acc.email}
+              type="button"
+              onClick={() => handleQuickLogin(acc.email)}
+              className="text-left p-3 rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] hover:border-[var(--color-primary)] hover:bg-[var(--bg-surface-alt)] transition-colors"
+            >
+              <div className="font-medium text-sm text-[var(--text-primary)]">{acc.name}</div>
+              <div className="text-xs text-[var(--text-secondary)] mt-0.5">{acc.role}</div>
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

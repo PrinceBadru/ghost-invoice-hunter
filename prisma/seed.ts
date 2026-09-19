@@ -17,12 +17,14 @@ async function main() {
       users: {
         create: [
           { name: "Sarah K.", email: "sarah@acme.test", passwordHash, role: "MASTER" },
+          { name: "Jane A.", email: "jane@acme.test", passwordHash, role: "ADMIN" },
+          { name: "Bob V.", email: "bob@acme.test", passwordHash, role: "VIEWER" },
         ],
       },
     },
     include: { users: true },
   });
-  const master = environment.users[0];
+  const master = environment.users.find((u) => u.role === "MASTER")!;
 
   const david = await prisma.user.create({
     data: {

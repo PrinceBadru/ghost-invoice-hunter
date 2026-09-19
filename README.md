@@ -36,7 +36,7 @@ npm run db:seed      # optional — adds a demo environment + sample data
 npm run dev
 ```
 
-Then visit http://localhost:3000. Either:
+Then visit http://localhost:3001. Either:
 - **Sign up** to create your own environment, or
 - Log in with the seeded demo account: `sarah@acme.test` / `password123`
 

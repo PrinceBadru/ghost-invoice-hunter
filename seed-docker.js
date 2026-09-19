@@ -4,6 +4,12 @@ const prisma = new PrismaClient();
 async function main() {
   const passwordHash = "$2a$10$M0kUXwWYF2jDo2ofzF9qXeKqYjpHw2A05uY.nJlWCDal9nh6YEu1O";
 
+  const existing = await prisma.user.findUnique({ where: { email: "sarah@acme.test" } });
+  if (existing) {
+    console.log("Database already seeded. Skipping seed script.");
+    return;
+  }
+
   const environment = await prisma.environment.create({
     data: {
       name: "Acme Financial Operations",
@@ -11,12 +17,14 @@ async function main() {
       users: {
         create: [
           { name: "Sarah K.", email: "sarah@acme.test", passwordHash, role: "MASTER" },
+          { name: "Jane A.", email: "jane@acme.test", passwordHash, role: "ADMIN" },
+          { name: "Bob V.", email: "bob@acme.test", passwordHash, role: "VIEWER" },
         ],
       },
     },
     include: { users: true },
   });
-  const master = environment.users[0];
+  const master = environment.users.find((u) => u.role === "MASTER");
 
   const david = await prisma.user.create({
     data: {

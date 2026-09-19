@@ -1,7 +1,7 @@
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat openssl
-
+RUN apk update && apk upgrade && apk add --no-cache libc6-compat openssl
+RUN npm install -g npm@latest
 # Install dependencies only when needed
 FROM base AS deps
 WORKDIR /app
@@ -9,7 +9,7 @@ WORKDIR /app
 # Install dependencies based on the preferred package manager
 COPY package.json package-lock.json* ./
 COPY prisma ./prisma
-RUN npm install
+RUN npm ci
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -53,14 +53,22 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Copy Prisma schema and migrations (for db push)
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
-# Copy startup script
+# Copy startup script and seed script
+COPY --from=builder --chown=nextjs:nodejs /app/seed-docker.js ./
 COPY --chown=nextjs:nodejs docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
+# Copy prisma CLI dependencies for startup script
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules/prisma ./node_modules/prisma
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules/@prisma/engines ./node_modules/@prisma/engines
+
+# Completely remove npm since it is no longer needed at runtime, eliminating upstream CVEs
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
+
 USER nextjs
 
-EXPOSE 3000
-ENV PORT=3000
+EXPOSE 3001
+ENV PORT=3001
 ENV HOSTNAME="0.0.0.0"
 
 # Expose the data directory for SQLite persistence
