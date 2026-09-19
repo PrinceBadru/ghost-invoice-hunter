@@ -1,0 +1,29 @@
+name: Gemini CLI Assistant
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  gemini-assistant:
+    # Only run if the comment contains '@gemini-cli'
+    if: contains(github.event.comment.body, '@gemini-cli')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Run Gemini CLI Assistant
+        uses: google-github-actions/run-gemini-cli@main
+        with:
+          command: 'assistant'
+        env:
+          # Note: This requires a GEMINI_API_KEY secret to be set in the repository settings.
+          # You can obtain one from Google AI Studio (https://aistudio.google.com/)
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

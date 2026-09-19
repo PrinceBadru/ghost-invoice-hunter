@@ -1,0 +1,25 @@
+name: OWASP Noir Security Scan
+
+on:
+  push:
+    branches: [ "main", "development" ]
+  pull_request:
+    branches: [ "main", "development" ]
+
+jobs:
+  noir-scan:
+    name: Run NOIR Scanner
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run OWASP Noir
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/app ghcr.io/owasp-noir/noir:main scan /app -f json -o /app/endpoints.json
+
+      - name: Upload endpoints.json as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: noir-endpoints
+          path: endpoints.json
