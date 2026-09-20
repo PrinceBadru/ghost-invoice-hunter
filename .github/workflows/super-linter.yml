@@ -33,6 +33,10 @@ jobs:
           VALIDATE_TSX: false
           VALIDATE_JAVASCRIPT_ES: false
           VALIDATE_JSX: false
+          VALIDATE_TYPESCRIPT_PRETTIER: false
+          VALIDATE_TSX_PRETTIER: false
+          VALIDATE_JAVASCRIPT_PRETTIER: false
+          VALIDATE_JSX_PRETTIER: false
 
           # You can disable specific linters if they are too noisy, for example:
           # VALIDATE_JAVASCRIPT_STANDARD: false
