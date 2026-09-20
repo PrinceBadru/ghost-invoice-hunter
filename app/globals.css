@@ -1,1 +1,104 @@
 @import "tailwindcss";
+
+@layer base {
+  /* Default Theme: Signal (Light Mode) */
+  :root {
+    --bg-app: #f5f7fa;
+    --bg-surface: #ffffff;
+    --bg-surface-alt: #f8fafc;
+    --color-primary: #315cff;
+    --color-primary-hover: #264fe6;
+    --color-primary-soft: #e8edff;
+    --text-primary: #172033;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border-color: #e2e8f0;
+
+    /* Fixed Semantic Tokens across themes */
+    --success: #168a5b;
+    --success-soft: #e8f7f0;
+    --warning: #c98200;
+    --warning-soft: #fff5dd;
+    --danger: #d64545;
+    --danger-soft: #fdecec;
+    --info: #4c6fff;
+    --info-soft: #edf1ff;
+    --insight: #8b5cf6;
+    --insight-soft: #f2edff;
+  }
+
+  /* Signal (Dark Mode) */
+  .dark {
+    --bg-app: #0b1020;
+    --bg-surface: #111827;
+    --bg-surface-alt: #172033;
+    --color-primary: #315cff;
+    --color-primary-hover: #264fe6;
+    --color-primary-soft: #18264f;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border-color: #263247;
+
+    --success-soft: #08291b;
+    --warning-soft: #2b1d00;
+    --danger-soft: #331010;
+    --info-soft: #111b3d;
+    --insight-soft: #22143d;
+  }
+
+  /* Theme Overrides: Midnight (Dark Only) */
+  [data-theme="midnight"].dark {
+    --bg-app: #080b12;
+    --bg-surface: #10151f;
+    --bg-surface-alt: #151c28;
+    --color-primary: #5b7cff;
+    --color-primary-hover: #7692ff;
+    --color-primary-soft: #18264f;
+    --text-primary: #f8fafc;
+    --text-secondary: #9aa7ba;
+    --text-muted: #667085;
+    --border-color: #222b3a;
+  }
+
+  /* Theme Overrides: Aurora (Dark Only) */
+  [data-theme="aurora"].dark {
+    --bg-app: #080a18;
+    --bg-surface: #101329;
+    --bg-surface-alt: #151a36;
+    --color-primary: #7c5cff;
+    --color-primary-hover: #9275ff;
+    --color-primary-soft: #21194a;
+    --text-primary: #f8fafc;
+    --text-secondary: #a5b4fc;
+    --text-muted: #717b9b;
+    --border-color: #282d4a;
+  }
+
+  /* Theme Overrides: Slate (Light Only) */
+  [data-theme="slate"] {
+    --bg-app: #f4f6f8;
+    --bg-surface: #ffffff;
+    --bg-surface-alt: #f8fafc;
+    --color-primary: #475569;
+    --color-primary-hover: #334155;
+    --color-primary-soft: #e2e8f0;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border-color: #cbd5e1;
+  }
+}
+
+body {
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-inter), sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-space-grotesk), sans-serif;
+}
+.font-mono {
+  font-family: var(--font-jetbrains-mono), monospace;
+}

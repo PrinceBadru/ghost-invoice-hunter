@@ -1,0 +1,138 @@
+// Ghost Invoice Hunter — data model
+//
+// Architecture note: a User belongs to exactly ONE Environment (see the
+// required, non-nullable environmentId below — there is no membership/join
+// table). Environments are closed silos; nothing is queried across them.
+// A "Business" is an entity tracked INSIDE an environment (a department,
+// or an outside company whose invoices are being processed) — it is not
+// a tenant a user can belong to.
+//
+// SQLite has no native enum support in Prisma, so role/type/status/severity
+// are plain strings constrained at the application layer (see lib/types.ts).
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl", "linux-musl-openssl-3.0.x"]
+}
+
+model Environment {
+  id                 String   @id @default(cuid())
+  name               String
+  toleranceThreshold Float    @default(5.0)
+  createdAt          DateTime @default(now())
+
+  users       User[]
+  businesses  Business[]
+  documents   Document[]
+  discrepancies Discrepancy[]
+  auditLogs   AuditLog[]
+}
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  passwordHash  String
+  role          String   @default("UPLOADER") // MASTER | ADMIN | UPLOADER | VIEWER
+  createdAt     DateTime @default(now())
+
+  environmentId String
+  environment   Environment @relation(fields: [environmentId], references: [id])
+
+  documents Document[]
+  auditLogs AuditLog[]
+}
+
+model Business {
+  id         String   @id @default(cuid())
+  name       String
+  vendorCode String
+  createdAt  DateTime @default(now())
+
+  environmentId String
+  environment   Environment @relation(fields: [environmentId], references: [id])
+
+  documents Document[]
+
+  @@unique([environmentId, vendorCode])
+}
+
+model Document {
+  id             String    @id @default(cuid())
+  type           String    // PURCHASE_ORDER | QUOTE | INVOICE
+  reference      String    // the PO / quote / invoice number itself
+  linkedPoRef    String?   // on an INVOICE: which PO it should match
+  linkedQuoteRef String?   // on an INVOICE or PO: which quote it should trace to
+  fileName       String
+  totalAmount    Float     @default(0)
+  documentDate   DateTime?
+  status         String    @default("Processing") // Processing | Matched | Needs Review | Discrepancy | Failed
+  createdAt      DateTime  @default(now())
+
+  environmentId String
+  environment   Environment @relation(fields: [environmentId], references: [id])
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id])
+
+  uploadedById String
+  uploadedBy   User   @relation(fields: [uploadedById], references: [id])
+
+  lineItems     LineItem[]
+  discrepancies Discrepancy[] @relation("InvoiceDoc")
+
+  @@index([environmentId, type])
+  @@index([environmentId, businessId, type])
+}
+
+model LineItem {
+  id          String @id @default(cuid())
+  description String
+  quantity    Float  @default(1)
+  unitPrice   Float  @default(0)
+  amount      Float  @default(0)
+
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+}
+
+model Discrepancy {
+  id              String   @id @default(cuid())
+  poReference     String?
+  poAmount        Float?
+  quoteReference  String?
+  quoteAmount     Float?
+  invoiceAmount   Float
+  variance        Float
+  variancePercent Float
+  severity        String   // Low | Medium | High
+  status          String   // Matched | Needs Review | Discrepancy
+  reasons         String   // JSON-encoded string[]
+  score           Int      @default(0)
+  createdAt       DateTime @default(now())
+
+  environmentId String
+  environment   Environment @relation(fields: [environmentId], references: [id])
+
+  invoiceDocId String
+  invoiceDoc   Document @relation("InvoiceDoc", fields: [invoiceDocId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String
+  detail    String?
+  reason    String?
+  createdAt DateTime @default(now())
+
+  environmentId String
+  environment   Environment @relation(fields: [environmentId], references: [id])
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+}
