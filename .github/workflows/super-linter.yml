@@ -10,52 +10,17 @@ jobs:
   super-lint:
     name: Lint Code Base
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      statuses: write
-      pull-requests: write
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
-          # Full git history is needed to get a proper list of changed files within `super-linter`
-          fetch-depth: 0
+          node-version: 20
 
-      - name: Run Super-Linter
-        uses: super-linter/super-linter@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # To avoid noise, only lint files that were modified in the PR/commit
-          VALIDATE_ALL_CODEBASE: false
-          ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: false
-          MULTI_STATUS: false
-          VALIDATE_TYPESCRIPT_ES: false
-          VALIDATE_TSX: false
-          VALIDATE_JAVASCRIPT_ES: false
-          VALIDATE_JSX: false
-          VALIDATE_TYPESCRIPT_PRETTIER: false
-          VALIDATE_TSX_PRETTIER: false
-          VALIDATE_JAVASCRIPT_PRETTIER: false
-          VALIDATE_JSX_PRETTIER: false
-          VALIDATE_MARKDOWN_PRETTIER: false
-          VALIDATE_MARKDOWN: false
-          VALIDATE_NATURAL_LANGUAGE: false
-          VALIDATE_SPELL_CODESPELL: false
-          VALIDATE_TRIVY: false
-          VALIDATE_JSCPD: false
-          VALIDATE_GITHUB_ACTIONS: false
-          VALIDATE_GITHUB_ACTIONS_ZIZMOR: false
-          VALIDATE_JAVASCRIPT_BIOME: false
-          VALIDATE_TYPESCRIPT_BIOME: false
-          VALIDATE_JSX_BIOME: false
-          VALIDATE_TSX_BIOME: false
-          VALIDATE_BASH_EXEC: false
-          VALIDATE_CHECKOV: false
-          VALIDATE_CSS: false
-          VALIDATE_DOCKERFILE_HADOLINT: false
-          VALIDATE_ENV: false
-          VALIDATE_GITLEAKS: false
+      - name: Install dependencies
+        run: npm ci
 
-          # You can disable specific linters if they are too noisy, for example:
-          # VALIDATE_JAVASCRIPT_STANDARD: false
-          # VALIDATE_TYPESCRIPT_STANDARD: false
+      - name: Run Next.js Build (Linting & Typechecking)
+        run: npm run build
