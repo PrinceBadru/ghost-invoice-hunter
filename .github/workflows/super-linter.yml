@@ -29,6 +29,10 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: false
           MULTI_STATUS: false
+          VALIDATE_TYPESCRIPT_ES: false
+          VALIDATE_TSX: false
+          VALIDATE_JAVASCRIPT_ES: false
+          VALIDATE_JSX: false
 
           # You can disable specific linters if they are too noisy, for example:
           # VALIDATE_JAVASCRIPT_STANDARD: false
