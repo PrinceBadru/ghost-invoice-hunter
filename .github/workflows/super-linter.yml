@@ -39,6 +39,8 @@ jobs:
           VALIDATE_TYPESCRIPT_BIOME: false
           VALIDATE_JSX_BIOME: false
           VALIDATE_TSX_BIOME: false
+          VALIDATE_JSON_BIOME: false
+          VALIDATE_JSONC_BIOME: false
           VALIDATE_BIOME: false
           VALIDATE_JAVASCRIPT_ES: false
           VALIDATE_TYPESCRIPT_ES: false

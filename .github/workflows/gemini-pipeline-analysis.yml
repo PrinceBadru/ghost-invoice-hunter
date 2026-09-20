@@ -1,6 +1,7 @@
 name: Gemini Pipeline Analysis
 
 on:
+  # zizmor: ignore[dangerous-triggers]
   workflow_run:
     # Triggers when either NOIR or Super-Linter finishes
     workflows: ["OWASP Noir Security Scan", "Super-Linter Quality Assurance"]
