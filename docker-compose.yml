@@ -8,10 +8,6 @@ services:
       - DATABASE_URL=file:/app/data/sqlite.db
       # Pull JWT_SECRET from the host environment (or .env file) instead of hardcoding
       - JWT_SECRET=${JWT_SECRET}
-    read_only: true
-    tmpfs:
-      - /tmp
-      - /app/.next
     volumes:
       - app-data:/app/data
     restart: unless-stopped
