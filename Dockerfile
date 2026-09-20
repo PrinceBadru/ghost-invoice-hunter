@@ -60,7 +60,7 @@ RUN chmod +x docker-entrypoint.sh
 
 # Copy prisma CLI dependencies for startup script
 COPY --from=deps --chown=nextjs:nodejs /app/node_modules/prisma ./node_modules/prisma
-COPY --from=deps --chown=nextjs:nodejs /app/node_modules/@prisma/engines ./node_modules/@prisma/engines
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
 
 # Completely remove npm since it is no longer needed at runtime, eliminating upstream CVEs
 RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
