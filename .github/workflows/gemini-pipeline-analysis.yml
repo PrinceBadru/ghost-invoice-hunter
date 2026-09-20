@@ -1,0 +1,31 @@
+name: Gemini Pipeline Analysis
+
+on:
+  workflow_run:
+    # Triggers when either NOIR or Super-Linter finishes
+    workflows: ["OWASP Noir Security Scan", "Super-Linter Quality Assurance"]
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: read
+  pull-requests: write
+
+jobs:
+  gemini-analyze:
+    name: Analyze Pipeline Failure
+    # Only run if the triggering workflow failed
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Run Gemini Pipeline Analysis
+        uses: google-github-actions/run-gemini-cli@main
+        with:
+          # Custom prompt for the CLI to analyze the failure
+          command: 'analyze --context="A pipeline has failed. Please analyze the logs and suggest fixes."'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
