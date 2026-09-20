@@ -19,10 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
 
       - name: Run Gemini Pipeline Analysis
-        uses: google-github-actions/run-gemini-cli@main
+        uses: google-github-actions/run-gemini-cli@387c8ddb7a72078825da941758b811b9153c71e8
         with:
           # Custom prompt for the CLI to analyze the failure
           command: 'analyze --context="A pipeline has failed. Please analyze the logs and suggest fixes."'

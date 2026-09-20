@@ -12,14 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
 
       - name: Run OWASP Noir
         run: |
           docker run --rm -v ${{ github.workspace }}:/app --entrypoint sh ghcr.io/owasp-noir/noir:main -c "noir -b /app -f json -o /app/endpoints.json || noir scan /app -f json -o /app/endpoints.json"
 
       - name: Upload endpoints.json as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: noir-endpoints
           path: endpoints.json

@@ -10,12 +10,37 @@ jobs:
   super-lint:
     name: Lint Code Base
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      statuses: write
+      pull-requests: write
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
+        with:
+          # Full git history is needed to get a proper list of changed files within `super-linter`
+          fetch-depth: 0
+
+      - name: Run Super-Linter
+        uses: super-linter/super-linter@108536fa21a9e3c8a5b40bdd30b29d74ab699d40
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # To avoid noise, only lint files that were modified in the PR/commit
+          VALIDATE_ALL_CODEBASE: false
+          ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: false
+          MULTI_STATUS: false
+
+          VALIDATE_JAVASCRIPT_STANDARD: false
+          VALIDATE_TYPESCRIPT_STANDARD: false
+          VALIDATE_JSX_STANDARD: false
+          VALIDATE_TSX_STANDARD: false
+          VALIDATE_JAVASCRIPT_BIOME: false
+          VALIDATE_TYPESCRIPT_BIOME: false
+          VALIDATE_JSX_BIOME: false
+          VALIDATE_TSX_BIOME: false
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@db0fb3a98ed314b69026b6e8c9be26a7e2fe65a8
         with:
           node-version: 20
 

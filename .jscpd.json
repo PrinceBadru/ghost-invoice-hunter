@@ -1,0 +1,10 @@
+{
+  "threshold": 5,
+  "reporters": ["console"],
+  "ignore": [
+    "**/node_modules/**",
+    "**/.next/**",
+    "**/components/ui/**"
+  ],
+  "absolute": true
+}

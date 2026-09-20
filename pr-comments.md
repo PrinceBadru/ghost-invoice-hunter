@@ -373,7 +373,7 @@ Length of output: 5526
 
 **Reachability:** External  
 **Exploitability:** Trivial  
-**CWE:** [CWE-798](https://cwe.mitre.org/data/definitions/798.html) — Use of Hard-coded Credentials
+**CWE:** [CWE-798](https://cwe.mitre.org/data/definitions/798.html) — Use of hardcoded Credentials
 
 **Remove test credentials from the public login flow.** `LoginForm` ships account identifiers and sets `password123`, which quick-login submits to `/api/auth/login`. Both seed scripts create the listed accounts, including `MASTER` and `ADMIN`, and print the shared password. Remove quick-login credentials from production builds and restrict these seed accounts to isolated non-production environments.
 
@@ -744,7 +744,7 @@ Length of output: 2034
 **Broken Authentication**
 
 **Exploitability:** Trivial  
-**CWE:** [CWE-798](https://cwe.mitre.org/data/definitions/798.html) — Use of Hard-coded Credentials
+**CWE:** [CWE-798](https://cwe.mitre.org/data/definitions/798.html) — Use of hardcoded Credentials
 
 <details>
 <summary>Reachability path</summary>

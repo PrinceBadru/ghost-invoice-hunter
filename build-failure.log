@@ -1,0 +1,36 @@
+﻿Lint Code Base	Install dependencies	﻿2026-09-20T16:21:13.7100105Z ##[group]Run npm ci
+Lint Code Base	Install dependencies	2026-09-20T16:21:13.7100456Z ^[[36;1mnpm ci^[[0m
+Lint Code Base	Install dependencies	2026-09-20T16:21:13.7143245Z shell: /usr/bin/bash -e {0}
+Lint Code Base	Install dependencies	2026-09-20T16:21:13.7143544Z ##[endgroup]
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7532188Z npm error code ERESOLVE
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7533063Z npm error ERESOLVE could not resolve
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7533677Z npm error
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7534392Z npm error While resolving: next-themes@0.3.0
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7535092Z npm error Found: react@19.3.0
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7535921Z npm error node_modules/react
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7536640Z npm error   react@"^19.0.0" from the root project
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7537745Z npm error   peer react@"^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc" from lucide-react@0.446.0
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7538677Z npm error   node_modules/lucide-react
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7539534Z npm error     lucide-react@"^0.446.0" from the root project
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7540426Z npm error   3 more (next, react-dom, styled-jsx)
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7541047Z npm error
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7541592Z npm error Could not resolve dependency:
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7542581Z npm error peer react@"^16.8 || ^17 || ^18" from next-themes@0.3.0
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7543432Z npm error node_modules/next-themes
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7544695Z npm error   next-themes@"^0.3.0" from the root project
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7545387Z npm error
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7546496Z npm error Conflicting peer dependency: react@18.3.1
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7546950Z npm error node_modules/react
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7547388Z npm error   peer react@"^16.8 || ^17 || ^18" from next-themes@0.3.0
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7547827Z npm error   node_modules/next-themes
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7548228Z npm error     next-themes@"^0.3.0" from the root project
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7548563Z npm error
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7548899Z npm error Fix the upstream dependency conflict, or retry
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7549363Z npm error this command with --force or --legacy-peer-deps
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7549931Z npm error to accept an incorrect (and potentially broken) dependency resolution.
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7550384Z npm error
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7550578Z npm error
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7550835Z npm error For a full report see:
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7551320Z npm error /home/runner/.npm/_logs/2026-09-20T16_21_13_781Z-eresolve-report.txt
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7552116Z npm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-09-20T16_21_13_781Z-debug-0.log
+Lint Code Base	Install dependencies	2026-09-20T16:21:14.7643903Z ##[error]Process completed with exit code 1.
