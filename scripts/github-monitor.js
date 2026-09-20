@@ -17,8 +17,12 @@ if (fs.existsSync(STATE_FILE)) {
   try {
     const loadedState = JSON.parse(fs.readFileSync(STATE_FILE, "utf8"));
     if (Array.isArray(loadedState.reportedRuns)) {
-      loadedState.reportedRuns.forEach(id => state.reportedRuns[id] = Date.now());
-      loadedState.reportedComments.forEach(id => state.reportedComments[id] = Date.now());
+      loadedState.reportedRuns.forEach(
+        (id) => (state.reportedRuns[id] = Date.now()),
+      );
+      loadedState.reportedComments.forEach(
+        (id) => (state.reportedComments[id] = Date.now()),
+      );
     } else {
       state = loadedState;
     }
@@ -39,7 +43,7 @@ function checkGitHub() {
     // 1. Check for failed workflow runs
     const runsOutput = execSync(
       "gh run list --limit 15 --json databaseId,status,conclusion,name,url,headBranch",
-      { encoding: "utf8" }
+      { encoding: "utf8" },
     );
     const runs = JSON.parse(runsOutput);
 
@@ -56,10 +60,10 @@ function checkGitHub() {
       const run = latestRuns[workflowName];
       if (run.status === "completed" && run.conclusion === "failure") {
         const lastAlerted = state.reportedRuns[run.databaseId] || 0;
-        
+
         if (now - lastAlerted > REALERT_INTERVAL_MS) {
           console.log(
-            `\n🚨 HIGH PRIORITY ALERT: Workflow Failed! 🚨\nWorkflow: ${run.name}\nBranch: ${run.headBranch}\nURL: ${run.url}\nAgent: Please fetch the logs for this run, identify the issue, and apply a fix.`
+            `\n🚨 HIGH PRIORITY ALERT: Workflow Failed! 🚨\nWorkflow: ${run.name}\nBranch: ${run.headBranch}\nURL: ${run.url}\nAgent: Please fetch the logs for this run, identify the issue, and apply a fix.`,
           );
           state.reportedRuns[run.databaseId] = now;
           saveState();
@@ -71,7 +75,7 @@ function checkGitHub() {
     // 2. Check for recent PR comments or requested changes
     const prsOutput = execSync(
       "gh pr list --state open --json number,title,url",
-      { encoding: "utf8" }
+      { encoding: "utf8" },
     );
     const prs = JSON.parse(prsOutput);
 
@@ -80,7 +84,7 @@ function checkGitHub() {
 
       const prDetailsOutput = execSync(
         `gh pr view ${pr.number} --json reviews,comments`,
-        { encoding: "utf8" }
+        { encoding: "utf8" },
       );
       const prDetails = JSON.parse(prDetailsOutput);
 
@@ -102,7 +106,7 @@ function checkGitHub() {
             const lastAlerted = state.reportedComments[feedbackId] || 0;
             if (now - lastAlerted > REALERT_INTERVAL_MS) {
               console.log(
-                `\n💬 HIGH PRIORITY ALERT: PR Feedback Received! 💬\nPR: #${pr.number} - ${pr.title}\nURL: ${pr.url}\nComment: ${feedback.body}\nAgent: Please review this feedback and implement the requested changes.`
+                `\n💬 HIGH PRIORITY ALERT: PR Feedback Received! 💬\nPR: #${pr.number} - ${pr.title}\nURL: ${pr.url}\nComment: ${feedback.body}\nAgent: Please review this feedback and implement the requested changes.`,
               );
               state.reportedComments[feedbackId] = now;
               saveState();
