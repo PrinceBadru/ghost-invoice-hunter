@@ -20,6 +20,7 @@ jobs:
         with:
           # Full git history is needed to get a proper list of changed files within `super-linter`
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Run Super-Linter
         uses: super-linter/super-linter@108536fa21a9e3c8a5b40bdd30b29d74ab699d40
@@ -38,6 +39,22 @@ jobs:
           VALIDATE_TYPESCRIPT_BIOME: false
           VALIDATE_JSX_BIOME: false
           VALIDATE_TSX_BIOME: false
+          VALIDATE_JAVASCRIPT_ES: false
+          VALIDATE_TYPESCRIPT_ES: false
+          VALIDATE_TSX: false
+          VALIDATE_JSX: false
+          VALIDATE_JAVASCRIPT_PRETTIER: false
+          VALIDATE_TYPESCRIPT_PRETTIER: false
+          VALIDATE_JSON_PRETTIER: false
+          VALIDATE_MARKDOWN: false
+          VALIDATE_MARKDOWN_PRETTIER: false
+          VALIDATE_NATURAL_LANGUAGE: false
+          VALIDATE_SPELL_CODESPELL: false
+          VALIDATE_CSS: false
+          VALIDATE_DOCKERFILE_HADOLINT: false
+          VALIDATE_JSCPD: false
+          VALIDATE_TRIVY: false
+          VALIDATE_CHECKOV: false
 
       - name: Install Node.js
         uses: actions/setup-node@db0fb3a98ed314b69026b6e8c9be26a7e2fe65a8
