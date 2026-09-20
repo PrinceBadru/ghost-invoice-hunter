@@ -16,7 +16,7 @@ jobs:
 
       - name: Run OWASP Noir
         run: |
-          docker run --rm -v ${{ github.workspace }}:/app ghcr.io/owasp-noir/noir:main scan /app -f json -o /app/endpoints.json
+          docker run --rm -v ${{ github.workspace }}:/app --entrypoint sh ghcr.io/owasp-noir/noir:main -c "noir -b /app -f json -o /app/endpoints.json || noir scan /app -f json -o /app/endpoints.json"
 
       - name: Upload endpoints.json as artifact
         uses: actions/upload-artifact@v4
