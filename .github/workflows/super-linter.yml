@@ -24,7 +24,6 @@ jobs:
       - name: Run Super-Linter
         uses: super-linter/super-linter@latest
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # To avoid noise, only lint files that were modified in the PR/commit
           VALIDATE_ALL_CODEBASE: false
 
