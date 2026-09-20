@@ -17,6 +17,10 @@ jobs:
     # Only run if the triggering workflow failed
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      issues: write
     steps:
       - name: Checkout Code
         uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a

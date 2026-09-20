@@ -10,6 +10,8 @@ jobs:
   noir-scan:
     name: Run NOIR Scanner
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout Repository
         uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
