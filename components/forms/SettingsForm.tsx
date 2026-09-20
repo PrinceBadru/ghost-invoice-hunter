@@ -5,10 +5,30 @@ import { useTheme } from "next-themes";
 import { Sun, Moon, Laptop, Palette, ShieldAlert } from "lucide-react";
 
 const THEMES = [
-  { id: "signal", name: "Signal", desc: "Clean, intelligent, default operational theme.", color: "#315CFF" },
-  { id: "midnight", name: "Midnight", desc: "Command center dark theme for high-duration operators.", color: "#5B7CFF" },
-  { id: "aurora", name: "Aurora", desc: "Futuristic analytics with cyan and violet accents.", color: "#7C5CFF" },
-  { id: "slate", name: "Slate", desc: "Conservative, low-stimulation enterprise design.", color: "#475569" },
+  {
+    id: "signal",
+    name: "Signal",
+    desc: "Clean, intelligent, default operational theme.",
+    color: "#315CFF",
+  },
+  {
+    id: "midnight",
+    name: "Midnight",
+    desc: "Command center dark theme for high-duration operators.",
+    color: "#5B7CFF",
+  },
+  {
+    id: "aurora",
+    name: "Aurora",
+    desc: "Futuristic analytics with cyan and violet accents.",
+    color: "#7C5CFF",
+  },
+  {
+    id: "slate",
+    name: "Slate",
+    desc: "Conservative, low-stimulation enterprise design.",
+    color: "#475569",
+  },
 ];
 
 export function SettingsForm({
@@ -60,11 +80,15 @@ export function SettingsForm({
       <div className="p-6 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] space-y-6">
         <div className="flex items-center gap-2 border-b border-[var(--border-color)] pb-3">
           <Palette className="w-4 h-4 text-[var(--color-primary)]" />
-          <h2 className="text-sm font-semibold text-[var(--text-primary)]">Appearance & Visual Theme</h2>
+          <h2 className="text-sm font-semibold text-[var(--text-primary)]">
+            Appearance & Visual Theme
+          </h2>
         </div>
 
         <div className="space-y-2">
-          <label className="text-xs font-semibold uppercase text-[var(--text-muted)] font-mono">Appearance Mode</label>
+          <label className="text-xs font-semibold uppercase text-[var(--text-muted)] font-mono">
+            Appearance Mode
+          </label>
           <div className="grid grid-cols-3 gap-3">
             {[
               { id: "light", label: "Light", icon: Sun },
@@ -91,7 +115,9 @@ export function SettingsForm({
         </div>
 
         <div className="space-y-3 pt-2">
-          <label className="text-xs font-semibold uppercase text-[var(--text-muted)] font-mono">Theme Engine</label>
+          <label className="text-xs font-semibold uppercase text-[var(--text-muted)] font-mono">
+            Theme Engine
+          </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {THEMES.map((t) => {
               const isSelected = activeThemeEngine === t.id;
@@ -106,10 +132,17 @@ export function SettingsForm({
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-xs text-[var(--text-primary)]">{t.name}</span>
-                    <span className="w-3 h-3 rounded-full" style={{ backgroundColor: t.color }} />
+                    <span className="font-semibold text-xs text-[var(--text-primary)]">
+                      {t.name}
+                    </span>
+                    <span
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: t.color }}
+                    />
                   </div>
-                  <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">{t.desc}</p>
+                  <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
+                    {t.desc}
+                  </p>
                 </button>
               );
             })}
@@ -120,14 +153,20 @@ export function SettingsForm({
       <div className="p-6 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] space-y-4">
         <div className="flex items-center gap-2 border-b border-[var(--border-color)] pb-3">
           <ShieldAlert className="w-4 h-4 text-[var(--warning)]" />
-          <h2 className="text-sm font-semibold text-[var(--text-primary)]">Discrepancy & Threshold Rules</h2>
+          <h2 className="text-sm font-semibold text-[var(--text-primary)]">
+            Discrepancy & Threshold Rules
+          </h2>
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
           <div>
-            <div className="text-xs font-semibold text-[var(--text-primary)]">Default Price Variance Tolerance (%)</div>
+            <div className="text-xs font-semibold text-[var(--text-primary)]">
+              Default Price Variance Tolerance (%)
+            </div>
             <div className="text-[11px] text-[var(--text-muted)]">
-              Invoices exceeding this percentage variance relative to the PO will automatically trigger a 'Needs Review' or 'Discrepancy' status.
+              Invoices exceeding this percentage variance relative to the PO
+              will automatically trigger a 'Needs Review' or 'Discrepancy'
+              status.
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0 font-mono">
@@ -150,7 +189,11 @@ export function SettingsForm({
             )}
           </div>
         </div>
-        {!canEdit && <p className="text-[11px] text-[var(--text-muted)]">Only master or admin accounts can change this.</p>}
+        {!canEdit && (
+          <p className="text-[11px] text-[var(--text-muted)]">
+            Only master or admin accounts can change this.
+          </p>
+        )}
         {saved && <p className="text-[11px] text-[var(--success)]">Saved.</p>}
         {error && <p className="text-[11px] text-[var(--danger)]">{error}</p>}
       </div>

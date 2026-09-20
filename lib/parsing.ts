@@ -29,7 +29,9 @@ export function parseSpreadsheet(buffer: Buffer): ParsedDocument {
   if (!sheetName) return { rows: [], total: 0 };
 
   const sheet = workbook.Sheets[sheetName];
-  const json: Record<string, unknown>[] = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+  const json: Record<string, unknown>[] = XLSX.utils.sheet_to_json(sheet, {
+    defval: "",
+  });
 
   const pick = (row: Record<string, unknown>, keys: string[]): unknown => {
     for (const key of keys) {
@@ -40,19 +42,37 @@ export function parseSpreadsheet(buffer: Buffer): ParsedDocument {
 
   const rows: ParsedRow[] = json.map((row) => {
     const description = String(
-      pick(row, ["description", "Description", "item", "Item", "Item Description"]) ?? "Line item"
+      pick(row, [
+        "description",
+        "Description",
+        "item",
+        "Item",
+        "Item Description",
+      ]) ?? "Line item",
     );
-    
+
     let rawQty = pick(row, ["quantity", "Quantity", "qty", "Qty"]);
     let quantity = Number(rawQty);
     if (isNaN(quantity)) quantity = 1;
     if (rawQty === undefined || rawQty === null || rawQty === "") quantity = 1;
 
-    let rawPrice = pick(row, ["unitPrice", "Unit Price", "unit_price", "price", "Price"]);
+    let rawPrice = pick(row, [
+      "unitPrice",
+      "Unit Price",
+      "unit_price",
+      "price",
+      "Price",
+    ]);
     let unitPrice = Number(rawPrice);
     if (isNaN(unitPrice)) unitPrice = 0;
-    
-    let rawAmount = pick(row, ["amount", "Amount", "total", "Total", "Line Total"]);
+
+    let rawAmount = pick(row, [
+      "amount",
+      "Amount",
+      "total",
+      "Total",
+      "Line Total",
+    ]);
     let amount = Number(rawAmount);
     if (isNaN(amount)) amount = 0;
 

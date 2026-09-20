@@ -2,9 +2,9 @@ name: Super-Linter Quality Assurance
 
 on:
   push:
-    branches: [ "master", "development" ]
+    branches: ["master", "development"]
   pull_request:
-    branches: [ "master", "development" ]
+    branches: ["master", "development"]
 
 jobs:
   super-lint:
@@ -27,7 +27,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # To avoid noise, only lint files that were modified in the PR/commit
           VALIDATE_ALL_CODEBASE: false
-          
+
           # You can disable specific linters if they are too noisy, for example:
           # VALIDATE_JAVASCRIPT_STANDARD: false
           # VALIDATE_TYPESCRIPT_STANDARD: false

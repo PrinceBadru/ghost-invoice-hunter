@@ -15,11 +15,11 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      
+
       - name: Run Gemini PR Review
         uses: google-github-actions/run-gemini-cli@main
         with:
-          command: 'review'
+          command: "review"
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

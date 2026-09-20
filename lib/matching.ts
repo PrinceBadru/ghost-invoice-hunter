@@ -58,11 +58,12 @@ export async function evaluateInvoice(invoiceDocId: string) {
     severity = "High";
     score = 70;
     reasons.push(
-      `No matching purchase order found for reference "${invoice.linkedPoRef ?? "(none provided)"}"`
+      `No matching purchase order found for reference "${invoice.linkedPoRef ?? "(none provided)"}"`,
     );
   } else {
     variance = invoice.totalAmount - po.totalAmount;
-    variancePercent = po.totalAmount !== 0 ? (variance / po.totalAmount) * 100 : 0;
+    variancePercent =
+      po.totalAmount !== 0 ? (variance / po.totalAmount) * 100 : 0;
     const abs = Math.abs(variancePercent);
 
     if (abs <= tolerance) {
@@ -71,17 +72,18 @@ export async function evaluateInvoice(invoiceDocId: string) {
       score = 0;
     } else {
       status = abs > tolerance * 3 ? "Discrepancy" : "Needs Review";
-      severity = abs > SEVERITY_HIGH ? "High" : abs > SEVERITY_MEDIUM ? "Medium" : "Low";
+      severity =
+        abs > SEVERITY_HIGH ? "High" : abs > SEVERITY_MEDIUM ? "Medium" : "Low";
       score = Math.min(100, Math.round(abs * 4));
       reasons.push(
-        `Invoice total exceeds PO baseline by ${variancePercent.toFixed(2)}% ($${variance.toFixed(2)})`
+        `Invoice total exceeds PO baseline by ${variancePercent.toFixed(2)}% ($${variance.toFixed(2)})`,
       );
     }
   }
 
   if (quote && po && Math.abs(quote.totalAmount - po.totalAmount) > 0.01) {
     reasons.push(
-      `PO baseline differs from the original quote by $${(po.totalAmount - quote.totalAmount).toFixed(2)}`
+      `PO baseline differs from the original quote by $${(po.totalAmount - quote.totalAmount).toFixed(2)}`,
     );
   }
 
@@ -114,5 +116,14 @@ export async function evaluateInvoice(invoiceDocId: string) {
     },
   });
 
-  return { status, severity, score, reasons, variance, variancePercent, po, quote };
+  return {
+    status,
+    severity,
+    score,
+    reasons,
+    variance,
+    variancePercent,
+    po,
+    quote,
+  };
 }

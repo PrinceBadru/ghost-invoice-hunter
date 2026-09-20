@@ -19,7 +19,9 @@ export default async function TeamPage() {
     <div className="p-8 space-y-6 max-w-7xl mx-auto">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-display font-bold text-[var(--text-primary)]">Team Members</h1>
+          <h1 className="text-2xl font-display font-bold text-[var(--text-primary)]">
+            Team Members
+          </h1>
           <p className="text-xs text-[var(--text-secondary)]">
             Everyone in this environment, their role, and documents uploaded.
           </p>
@@ -38,10 +40,17 @@ export default async function TeamPage() {
           </thead>
           <tbody className="divide-y divide-[var(--border-color)]">
             {members.map((member) => (
-              <tr key={member.id} className="hover:bg-[var(--bg-surface-alt)] transition-colors">
+              <tr
+                key={member.id}
+                className="hover:bg-[var(--bg-surface-alt)] transition-colors"
+              >
                 <td className="p-3">
-                  <div className="font-semibold text-[var(--text-primary)]">{member.name}</div>
-                  <div className="text-[10px] font-mono text-[var(--text-muted)]">{member.email}</div>
+                  <div className="font-semibold text-[var(--text-primary)]">
+                    {member.name}
+                  </div>
+                  <div className="text-[10px] font-mono text-[var(--text-muted)]">
+                    {member.email}
+                  </div>
                 </td>
                 <td className="p-3 text-[var(--text-secondary)]">
                   <span className="inline-flex items-center gap-1 text-[11px] text-[var(--success)]">

@@ -9,10 +9,7 @@ const PUBLIC_PATHS = ["/login", "/signup"];
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  if (
-    PUBLIC_PATHS.includes(pathname) ||
-    pathname.startsWith("/api/auth")
-  ) {
+  if (PUBLIC_PATHS.includes(pathname) || pathname.startsWith("/api/auth")) {
     return NextResponse.next();
   }
 

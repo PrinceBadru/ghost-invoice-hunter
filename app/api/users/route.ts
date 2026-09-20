@@ -17,26 +17,42 @@ const schema = z.object({
 
 export async function POST(req: NextRequest) {
   const currentUser = await getCurrentUser();
-  if (!currentUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!currentUser)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   if (!ROLES_THAT_CAN_MANAGE_USERS.includes(currentUser.role as any)) {
-    return NextResponse.json({ error: "Only master or admin accounts can add users" }, { status: 403 });
+    return NextResponse.json(
+      { error: "Only master or admin accounts can add users" },
+      { status: 403 },
+    );
   }
 
   const body = await req.json().catch(() => null);
   const parsed = schema.safeParse(body);
   if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Invalid input" }, { status: 400 });
+    return NextResponse.json(
+      { error: parsed.error.issues[0]?.message ?? "Invalid input" },
+      { status: 400 },
+    );
   }
   const { name, email, password, role } = parsed.data;
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
-    return NextResponse.json({ error: "An account with that email already exists" }, { status: 409 });
+    return NextResponse.json(
+      { error: "An account with that email already exists" },
+      { status: 409 },
+    );
   }
 
   const passwordHash = await hashPassword(password);
   const user = await prisma.user.create({
-    data: { name, email, passwordHash, role, environmentId: currentUser.environmentId },
+    data: {
+      name,
+      email,
+      passwordHash,
+      role,
+      environmentId: currentUser.environmentId,
+    },
   });
 
   await prisma.auditLog.create({
@@ -47,5 +63,10 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  return NextResponse.json({ id: user.id, name: user.name, email: user.email, role: user.role });
+  return NextResponse.json({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  });
 }

@@ -16,7 +16,8 @@ export function InvoicesClient({ invoices }: { invoices: InvoiceRecord[] }) {
       inv.vendor.toLowerCase().includes(search.toLowerCase()) ||
       inv.poNumber.toLowerCase().includes(search.toLowerCase());
 
-    const matchesStatus = selectedStatus === "ALL" || inv.status === selectedStatus;
+    const matchesStatus =
+      selectedStatus === "ALL" || inv.status === selectedStatus;
 
     return matchesSearch && matchesStatus;
   });
@@ -25,7 +26,9 @@ export function InvoicesClient({ invoices }: { invoices: InvoiceRecord[] }) {
     <div className="p-8 space-y-6 max-w-7xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-display font-bold text-[var(--text-primary)]">Invoices</h1>
+          <h1 className="text-2xl font-display font-bold text-[var(--text-primary)]">
+            Invoices
+          </h1>
           <p className="text-xs text-[var(--text-secondary)]">
             Manage and inspect incoming vendor invoices across all statuses.
           </p>
@@ -79,24 +82,42 @@ export function InvoicesClient({ invoices }: { invoices: InvoiceRecord[] }) {
             <tbody className="divide-y divide-[var(--border-color)]">
               {filteredInvoices.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="p-6 text-center text-[var(--text-muted)]">
+                  <td
+                    colSpan={7}
+                    className="p-6 text-center text-[var(--text-muted)]"
+                  >
                     No invoices match that filter.
                   </td>
                 </tr>
               )}
               {filteredInvoices.map((inv) => (
-                <tr key={inv.id} className="hover:bg-[var(--bg-surface-alt)] transition-colors">
-                  <td className="p-3 font-mono font-semibold text-[var(--text-primary)]">{inv.invoiceNumber}</td>
+                <tr
+                  key={inv.id}
+                  className="hover:bg-[var(--bg-surface-alt)] transition-colors"
+                >
+                  <td className="p-3 font-mono font-semibold text-[var(--text-primary)]">
+                    {inv.invoiceNumber}
+                  </td>
                   <td className="p-3 text-[var(--text-primary)]">
                     <div>{inv.vendor}</div>
-                    <div className="text-[10px] text-[var(--text-muted)] font-mono">{inv.vendorId}</div>
+                    <div className="text-[10px] text-[var(--text-muted)] font-mono">
+                      {inv.vendorId}
+                    </div>
                   </td>
-                  <td className="p-3 text-[var(--text-secondary)] font-mono">{inv.invoiceDate}</td>
+                  <td className="p-3 text-[var(--text-secondary)] font-mono">
+                    {inv.invoiceDate}
+                  </td>
                   <td className="p-3 text-right font-mono text-[var(--text-secondary)]">
-                    ${inv.poAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                    $
+                    {inv.poAmount.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}
                   </td>
                   <td className="p-3 text-right font-mono font-semibold text-[var(--text-primary)]">
-                    ${inv.invoiceAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                    $
+                    {inv.invoiceAmount.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}
                   </td>
                   <td className="p-3">
                     <StatusBadge status={inv.status} severity={inv.severity} />

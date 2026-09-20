@@ -44,11 +44,15 @@ export function LoginForm() {
       >
         <div className="flex items-center gap-2 justify-center pb-2">
           <Ghost className="w-5 h-5 text-[var(--color-primary)]" />
-          <span className="font-display font-bold text-[var(--text-primary)]">Ghost Invoice Hunter</span>
+          <span className="font-display font-bold text-[var(--text-primary)]">
+            Ghost Invoice Hunter
+          </span>
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-medium text-[var(--text-secondary)]">Email</label>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">
+            Email
+          </label>
           <input
             type="email"
             required
@@ -59,7 +63,9 @@ export function LoginForm() {
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-medium text-[var(--text-secondary)]">Password</label>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">
+            Password
+          </label>
           <input
             type="password"
             required
@@ -81,7 +87,10 @@ export function LoginForm() {
 
         <p className="text-xs text-center text-[var(--text-secondary)]">
           New environment?{" "}
-          <Link href="/signup" className="text-[var(--color-primary)] font-medium hover:underline">
+          <Link
+            href="/signup"
+            className="text-[var(--color-primary)] font-medium hover:underline"
+          >
             Set one up
           </Link>
         </p>

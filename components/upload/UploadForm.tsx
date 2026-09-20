@@ -2,7 +2,12 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { UploadCloud, CheckCircle2, AlertTriangle, PlusCircle } from "lucide-react";
+import {
+  UploadCloud,
+  CheckCircle2,
+  AlertTriangle,
+  PlusCircle,
+} from "lucide-react";
 
 interface BusinessOption {
   id: string;
@@ -27,7 +32,12 @@ export function UploadForm({ businesses }: { businesses: BusinessOption[] }) {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<{ status: string; total: number; rowCount: number; reasons: string[] } | null>(null);
+  const [result, setResult] = useState<{
+    status: string;
+    total: number;
+    rowCount: number;
+    reasons: string[];
+  } | null>(null);
 
   // Inline "add a new business" — master/admin only in practice, enforced server-side.
   const [showNewBusiness, setShowNewBusiness] = useState(false);
@@ -42,7 +52,10 @@ export function UploadForm({ businesses }: { businesses: BusinessOption[] }) {
     const res = await fetch("/api/businesses", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: newBusinessName, vendorCode: newBusinessCode }),
+      body: JSON.stringify({
+        name: newBusinessName,
+        vendorCode: newBusinessCode,
+      }),
     });
     const body = await res.json().catch(() => ({}));
     if (!res.ok) {
@@ -75,7 +88,10 @@ export function UploadForm({ businesses }: { businesses: BusinessOption[] }) {
     formData.append("linkedQuoteRef", linkedQuoteRef);
     if (documentDate) formData.append("documentDate", documentDate);
 
-    const res = await fetch("/api/documents", { method: "POST", body: formData });
+    const res = await fetch("/api/documents", {
+      method: "POST",
+      body: formData,
+    });
     const body = await res.json().catch(() => ({}));
     setLoading(false);
 
@@ -95,7 +111,9 @@ export function UploadForm({ businesses }: { businesses: BusinessOption[] }) {
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1">
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Document type</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              Document type
+            </label>
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
@@ -110,7 +128,9 @@ export function UploadForm({ businesses }: { businesses: BusinessOption[] }) {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Business</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              Business
+            </label>
             <div className="flex gap-1.5">
               <select
                 value={businessId}
@@ -155,7 +175,11 @@ export function UploadForm({ businesses }: { businesses: BusinessOption[] }) {
                 className="px-2 py-1.5 text-xs rounded border border-[var(--border-color)] bg-[var(--bg-surface-alt)]"
               />
             </div>
-            {businessError && <p className="text-[11px] text-[var(--danger)]">{businessError}</p>}
+            {businessError && (
+              <p className="text-[11px] text-[var(--danger)]">
+                {businessError}
+              </p>
+            )}
             <button
               type="button"
               onClick={handleAddBusiness}
@@ -169,7 +193,11 @@ export function UploadForm({ businesses }: { businesses: BusinessOption[] }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1">
             <label className="text-xs font-medium text-[var(--text-secondary)]">
-              {type === "INVOICE" ? "Invoice number" : type === "PURCHASE_ORDER" ? "PO number" : "Quote reference"}
+              {type === "INVOICE"
+                ? "Invoice number"
+                : type === "PURCHASE_ORDER"
+                  ? "PO number"
+                  : "Quote reference"}
             </label>
             <input
               required
@@ -179,7 +207,9 @@ export function UploadForm({ businesses }: { businesses: BusinessOption[] }) {
             />
           </div>
           <div className="space-y-1">
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Document date (optional)</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              Document date (optional)
+            </label>
             <input
               type="date"
               value={documentDate}
@@ -192,7 +222,9 @@ export function UploadForm({ businesses }: { businesses: BusinessOption[] }) {
         {type === "INVOICE" && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Matching PO number</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">
+                Matching PO number
+              </label>
               <input
                 value={linkedPoRef}
                 onChange={(e) => setLinkedPoRef(e.target.value)}
@@ -201,7 +233,9 @@ export function UploadForm({ businesses }: { businesses: BusinessOption[] }) {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Original quote ref (optional)</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">
+                Original quote ref (optional)
+              </label>
               <input
                 value={linkedQuoteRef}
                 onChange={(e) => setLinkedQuoteRef(e.target.value)}
@@ -212,7 +246,9 @@ export function UploadForm({ businesses }: { businesses: BusinessOption[] }) {
         )}
 
         <div className="space-y-1">
-          <label className="text-xs font-medium text-[var(--text-secondary)]">Spreadsheet file (.xlsx or .csv)</label>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">
+            Spreadsheet file (.xlsx or .csv)
+          </label>
           <label className="flex items-center gap-2 px-3 py-6 rounded-md border border-dashed border-[var(--border-color)] bg-[var(--bg-surface-alt)] text-xs text-[var(--text-secondary)] cursor-pointer hover:border-[var(--color-primary)] justify-center">
             <UploadCloud className="w-4 h-4" />
             {file ? file.name : "Click to choose a file"}
@@ -244,9 +280,15 @@ export function UploadForm({ businesses }: { businesses: BusinessOption[] }) {
         <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] space-y-2">
           <div className="flex items-center gap-2 text-sm font-medium text-[var(--text-primary)]">
             <CheckCircle2 className="w-4 h-4 text-[var(--success)]" />
-            Parsed {result.rowCount} line item(s) — total ${result.total.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+            Parsed {result.rowCount} line item(s) — total $
+            {result.total.toLocaleString("en-US", { minimumFractionDigits: 2 })}
           </div>
-          <div className="text-xs text-[var(--text-secondary)]">Resulting status: <span className="font-semibold text-[var(--text-primary)]">{result.status}</span></div>
+          <div className="text-xs text-[var(--text-secondary)]">
+            Resulting status:{" "}
+            <span className="font-semibold text-[var(--text-primary)]">
+              {result.status}
+            </span>
+          </div>
           {result.reasons.length > 0 && (
             <ul className="text-xs text-[var(--text-muted)] list-disc pl-4 space-y-0.5">
               {result.reasons.map((r, i) => (

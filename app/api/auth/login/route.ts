@@ -20,16 +20,19 @@ export async function POST(req: NextRequest) {
   }
   const { email, password } = parsed.data;
   const normalizedEmail = email.toLowerCase();
-  
+
   // Rate limiting check
   const ip = req.headers.get("x-forwarded-for") || "unknown";
   const rateLimitKey = `${ip}:${normalizedEmail}`;
   const attemptInfo = loginAttempts.get(rateLimitKey);
-  
+
   if (attemptInfo) {
     if (Date.now() - attemptInfo.timestamp < LOCKOUT_DURATION) {
       if (attemptInfo.count >= MAX_ATTEMPTS) {
-        return NextResponse.json({ error: "Too many login attempts. Please try again later." }, { status: 429 });
+        return NextResponse.json(
+          { error: "Too many login attempts. Please try again later." },
+          { status: 429 },
+        );
       }
     } else {
       // Reset if lockout duration has passed
@@ -37,16 +40,24 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
-  
+  const user = await prisma.user.findUnique({
+    where: { email: normalizedEmail },
+  });
+
   if (!user || !(await comparePassword(password, user.passwordHash))) {
     // Record failed attempt
     const currentCount = loginAttempts.get(rateLimitKey)?.count || 0;
-    loginAttempts.set(rateLimitKey, { count: currentCount + 1, timestamp: Date.now() });
-    
-    return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
+    loginAttempts.set(rateLimitKey, {
+      count: currentCount + 1,
+      timestamp: Date.now(),
+    });
+
+    return NextResponse.json(
+      { error: "Invalid email or password" },
+      { status: 401 },
+    );
   }
-  
+
   // Clear failed attempts on successful login
   loginAttempts.delete(rateLimitKey);
 

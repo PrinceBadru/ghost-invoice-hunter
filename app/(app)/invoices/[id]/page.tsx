@@ -43,7 +43,10 @@ export default async function InvoiceDetailPage({
 
   return (
     <div className="p-8 space-y-6 max-w-5xl mx-auto">
-      <Link href="/invoices" className="inline-flex items-center gap-1.5 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+      <Link
+        href="/invoices"
+        className="inline-flex items-center gap-1.5 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+      >
         <ArrowLeft className="w-3.5 h-3.5" /> Back to invoices
       </Link>
 
@@ -53,7 +56,8 @@ export default async function InvoiceDetailPage({
             {invoice.reference}
           </h1>
           <p className="text-xs text-[var(--text-secondary)] mt-1">
-            {invoice.business.name} &middot; uploaded by {invoice.uploadedBy.name} &middot;{" "}
+            {invoice.business.name} &middot; uploaded by{" "}
+            {invoice.uploadedBy.name} &middot;{" "}
             {invoice.createdAt.toISOString().slice(0, 10)}
           </p>
         </div>
@@ -62,7 +66,11 @@ export default async function InvoiceDetailPage({
 
       {discrepancy && (
         <ReconciliationCard
-          quoteAmount={discrepancy.quoteAmount ?? discrepancy.poAmount ?? invoice.totalAmount}
+          quoteAmount={
+            discrepancy.quoteAmount ??
+            discrepancy.poAmount ??
+            invoice.totalAmount
+          }
           poAmount={discrepancy.poAmount ?? invoice.totalAmount}
           invoiceAmount={invoice.totalAmount}
         />
@@ -70,7 +78,9 @@ export default async function InvoiceDetailPage({
 
       {reasons.length > 0 && (
         <div className="p-4 rounded-xl border border-[var(--danger)] bg-[var(--danger-soft)] space-y-1">
-          <div className="text-xs font-semibold text-[var(--danger)]">Detected issues</div>
+          <div className="text-xs font-semibold text-[var(--danger)]">
+            Detected issues
+          </div>
           <ul className="text-xs text-[var(--text-secondary)] list-disc pl-4 space-y-0.5">
             {reasons.map((r, i) => (
               <li key={i}>{r}</li>
@@ -81,7 +91,9 @@ export default async function InvoiceDetailPage({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <h2 className="text-sm font-semibold text-[var(--text-primary)]">Invoice line items</h2>
+          <h2 className="text-sm font-semibold text-[var(--text-primary)]">
+            Invoice line items
+          </h2>
           <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] overflow-hidden">
             <table className="w-full text-left text-xs">
               <thead className="bg-[var(--bg-surface-alt)] text-[var(--text-muted)] font-mono">
@@ -94,10 +106,17 @@ export default async function InvoiceDetailPage({
               <tbody className="divide-y divide-[var(--border-color)]">
                 {invoice.lineItems.map((li) => (
                   <tr key={li.id}>
-                    <td className="p-2 text-[var(--text-primary)]">{li.description}</td>
-                    <td className="p-2 text-right font-mono text-[var(--text-secondary)]">{li.quantity}</td>
+                    <td className="p-2 text-[var(--text-primary)]">
+                      {li.description}
+                    </td>
+                    <td className="p-2 text-right font-mono text-[var(--text-secondary)]">
+                      {li.quantity}
+                    </td>
                     <td className="p-2 text-right font-mono text-[var(--text-primary)]">
-                      ${li.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                      $
+                      {li.amount.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                      })}
                     </td>
                   </tr>
                 ))}
@@ -123,10 +142,17 @@ export default async function InvoiceDetailPage({
                 <tbody className="divide-y divide-[var(--border-color)]">
                   {po.lineItems.map((li) => (
                     <tr key={li.id}>
-                      <td className="p-2 text-[var(--text-primary)]">{li.description}</td>
-                      <td className="p-2 text-right font-mono text-[var(--text-secondary)]">{li.quantity}</td>
+                      <td className="p-2 text-[var(--text-primary)]">
+                        {li.description}
+                      </td>
+                      <td className="p-2 text-right font-mono text-[var(--text-secondary)]">
+                        {li.quantity}
+                      </td>
                       <td className="p-2 text-right font-mono text-[var(--text-primary)]">
-                        ${li.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                        $
+                        {li.amount.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                        })}
                       </td>
                     </tr>
                   ))}
@@ -135,7 +161,8 @@ export default async function InvoiceDetailPage({
             </div>
           ) : (
             <p className="text-xs text-[var(--text-muted)] p-4 rounded-xl border border-dashed border-[var(--border-color)]">
-              No purchase order on file for reference "{invoice.linkedPoRef ?? "none provided"}".
+              No purchase order on file for reference "
+              {invoice.linkedPoRef ?? "none provided"}".
             </p>
           )}
         </div>

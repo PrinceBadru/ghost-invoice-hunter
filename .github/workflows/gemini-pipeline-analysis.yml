@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      
+
       - name: Run Gemini Pipeline Analysis
         uses: google-github-actions/run-gemini-cli@main
         with:

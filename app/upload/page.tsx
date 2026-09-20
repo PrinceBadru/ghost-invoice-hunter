@@ -16,17 +16,25 @@ export default async function UploadPage() {
 
   return (
     <div className="flex min-h-screen bg-[var(--bg-app)] text-[var(--text-primary)]">
-      <Sidebar environmentName={user.environment.name} userName={user.name} userRole={user.role} />
+      <Sidebar
+        environmentName={user.environment.name}
+        userName={user.name}
+        userRole={user.role}
+      />
       <main className="flex-1 overflow-y-auto p-8 space-y-6 max-w-7xl mx-auto">
         <div>
-          <h1 className="text-2xl font-display font-bold text-[var(--text-primary)]">Process Invoices</h1>
+          <h1 className="text-2xl font-display font-bold text-[var(--text-primary)]">
+            Process Invoices
+          </h1>
           <p className="text-xs text-[var(--text-secondary)]">
-            Upload a purchase order, quote, or invoice spreadsheet. Invoices are matched and scored automatically on upload.
+            Upload a purchase order, quote, or invoice spreadsheet. Invoices are
+            matched and scored automatically on upload.
           </p>
         </div>
         {businesses.length === 0 ? (
           <p className="text-xs text-[var(--warning)]">
-            No businesses are tracked in this environment yet — add one from the form below before uploading.
+            No businesses are tracked in this environment yet — add one from the
+            form below before uploading.
           </p>
         ) : null}
         <UploadForm businesses={businesses} />

@@ -10,9 +10,13 @@ const schema = z.object({
 
 export async function PATCH(req: NextRequest) {
   const currentUser = await getCurrentUser();
-  if (!currentUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!currentUser)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   if (!ROLES_THAT_CAN_MANAGE_SETTINGS.includes(currentUser.role as any)) {
-    return NextResponse.json({ error: "Only master or admin accounts can change settings" }, { status: 403 });
+    return NextResponse.json(
+      { error: "Only master or admin accounts can change settings" },
+      { status: 403 },
+    );
   }
 
   const body = await req.json().catch(() => null);

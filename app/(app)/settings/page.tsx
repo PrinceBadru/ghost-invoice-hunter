@@ -8,9 +8,12 @@ export default async function SettingsPage() {
   return (
     <div className="p-8 space-y-8 max-w-4xl mx-auto">
       <div>
-        <h1 className="text-2xl font-display font-bold text-[var(--text-primary)]">Settings</h1>
+        <h1 className="text-2xl font-display font-bold text-[var(--text-primary)]">
+          Settings
+        </h1>
         <p className="text-xs text-[var(--text-secondary)]">
-          Manage visual language preferences, theme engines, and reconciliation rules.
+          Manage visual language preferences, theme engines, and reconciliation
+          rules.
         </p>
       </div>
       <SettingsForm

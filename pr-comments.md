@@ -139,8 +139,6 @@ Length of output: 2953
 
 ---
 
-
-
 </details>
 
 <!-- cr-reachability -->
@@ -189,6 +187,7 @@ BODY:
 _🗄️ Data Integrity & Integration_ | _🟠 Major_ | _⚡ Quick win_
 
 **Normalize email addresses at the authentication boundary.** Signup stores and checks the submitted casing, and login queries with the submitted casing. This permits case-variant duplicates or login failures.
+
 - `app/api/auth/signup/route.ts#L22-L35`: convert the validated email to lowercase before the uniqueness check and persist only that normalized value.
 - `app/api/auth/login/route.ts#L19-L19`: query with the same lowercase normalization.
 
@@ -365,8 +364,6 @@ Repository: PrinceBadru/ghost-invoice-hunter
 Length of output: 5526
 
 ---
-
-
 
 </details>
 
@@ -664,6 +661,7 @@ Also raise `@types/react` and `@types/react-dom` back to their React 19 lines.
 +    "`@types/react`": "^19.0.0",
 +    "`@types/react-dom`": "^19.0.0",
 ```
+
 </details>
 
 <!-- suggestion_start -->
@@ -738,8 +736,6 @@ Repository: PrinceBadru/ghost-invoice-hunter
 Length of output: 2034
 
 ---
-
-
 
 </details>
 
@@ -878,7 +874,7 @@ Length of output: 2121
 💡 Result:
 
 <search_synthesis>
-In Next.js 16, synchronous access to `params` (as well as `searchParams`, `cookies()`, `headers()`, and `draftMode()`) has been fully removed [1][2][3]. While Next.js 15 introduced these as asynchronous APIs, it provided a temporary compatibility shim that allowed synchronous access while issuing warnings in development [1][4][5]. In Next.js 16, this shim is gone, and any attempt to access these properties synchronously will result in a hard error [1][2][6]. To migrate to the required asynchronous pattern, you must `await` the `params` object before accessing its properties [1][7][8]. ### Migration Examples #### Before (Next.js 14 and earlier) ```tsx // Synchronous access export default function Page({ params }) { const { slug } = params; return &lt;h1&gt;{slug}&lt;/h1&gt;; } ``` #### After (Next.js 16) You must mark the component as `async` and `await` the `params` promise [1][7][8]. ```tsx // Asynchronous access export default async function Page({ params }: { params: Promise&lt;{ slug: string }&gt; }) { const { slug } = await params; return &lt;h1&gt;{slug}&lt;/h1&gt;; } ``` ### Key Migration Details * Affected APIs: This change applies to `params` and `searchParams` in pages, layouts, route handlers, and metadata generators (including `generateMetadata`, `generateViewport`, and image generation functions like `opengraph-image`) [1][4][3]. * Codemod: Next.js provides an official codemod to automate this migration. You can run it in your project directory to update your codebase [1][2][4]: `npx `@next/codemod`@canary next-async-request-api .` * Client Components: If you need to access these values in a Client Component, you should resolve the promise in a parent Server Component and pass the values down as props, or use React&`#39`;s `use()` hook to unwrap the promise if necessary [7][8]. For further details, refer to the official Next.js 16 Upgrade Guide [1].
+In Next.js 16, synchronous access to `params` (as well as `searchParams`, `cookies()`, `headers()`, and `draftMode()`) has been fully removed [1][2][3]. While Next.js 15 introduced these as asynchronous APIs, it provided a temporary compatibility shim that allowed synchronous access while issuing warnings in development [1][4][5]. In Next.js 16, this shim is gone, and any attempt to access these properties synchronously will result in a hard error [1][2][6]. To migrate to the required asynchronous pattern, you must `await` the `params` object before accessing its properties [1][7][8]. ### Migration Examples #### Before (Next.js 14 and earlier) `tsx // Synchronous access export default function Page({ params }) { const { slug } = params; return &lt;h1&gt;{slug}&lt;/h1&gt;; } ` #### After (Next.js 16) You must mark the component as `async` and `await` the `params` promise [1][7][8]. `tsx // Asynchronous access export default async function Page({ params }: { params: Promise&lt;{ slug: string }&gt; }) { const { slug } = await params; return &lt;h1&gt;{slug}&lt;/h1&gt;; } ` ### Key Migration Details * Affected APIs: This change applies to `params` and `searchParams` in pages, layouts, route handlers, and metadata generators (including `generateMetadata`, `generateViewport`, and image generation functions like `opengraph-image`) [1][4][3]. * Codemod: Next.js provides an official codemod to automate this migration. You can run it in your project directory to update your codebase [1][2][4]: `npx `@next/codemod`@canary next-async-request-api .` * Client Components: If you need to access these values in a Client Component, you should resolve the promise in a parent Server Component and pass the values down as props, or use React&`#39`;s `use()` hook to unwrap the promise if necessary [7][8]. For further details, refer to the official Next.js 16 Upgrade Guide [1].
 </search_synthesis>
 
 <source_evidence>
@@ -1019,8 +1015,6 @@ Citations:
 
 ---
 
-
-
 </details>
 
 **Await `params` before reading the invoice ID.**
@@ -1044,6 +1038,7 @@ Next.js 16.3.4 removed synchronous access to App Router `params`. This page read
 -    where: { id: params.id, environmentId: user.environmentId, type: "INVOICE" },
 +    where: { id, environmentId: user.environmentId, type: "INVOICE" },
 ```
+
 </details>
 
 <!-- suggestion_start -->
@@ -1175,8 +1170,6 @@ Length of output: 4110
 
 ---
 
-
-
 </details>
 
 **Protect the session cookie in production.** The Docker image sets `NODE_ENV=production`, and the documented Docker setup exposes the app over HTTP. Without `secure`, the session JWT can be sent in plaintext and intercepted on non-TLS connections.
@@ -1255,4 +1248,3 @@ review. Visit https://docs.coderabbit.ai/cli?utm_source=ghpr
 ✅ Addressed in commit 4ac2f94
 
 ---
-

@@ -6,16 +6,22 @@ export default async function ReportsPage() {
   const user = await requireUser();
   const environmentId = user.environmentId;
 
-  const [totalInvoices, flagged, discrepancies, businessCount] = await Promise.all([
-    prisma.document.count({ where: { environmentId, type: "INVOICE" } }),
-    prisma.document.count({
-      where: { environmentId, type: "INVOICE", status: { in: ["Needs Review", "Discrepancy"] } },
-    }),
-    prisma.discrepancy.findMany({ where: { environmentId } }),
-    prisma.business.count({ where: { environmentId } }),
-  ]);
+  const [totalInvoices, flagged, discrepancies, businessCount] =
+    await Promise.all([
+      prisma.document.count({ where: { environmentId, type: "INVOICE" } }),
+      prisma.document.count({
+        where: {
+          environmentId,
+          type: "INVOICE",
+          status: { in: ["Needs Review", "Discrepancy"] },
+        },
+      }),
+      prisma.discrepancy.findMany({ where: { environmentId } }),
+      prisma.business.count({ where: { environmentId } }),
+    ]);
 
-  const discrepancyRate = totalInvoices > 0 ? (flagged / totalInvoices) * 100 : 0;
+  const discrepancyRate =
+    totalInvoices > 0 ? (flagged / totalInvoices) * 100 : 0;
 
   // Leakage prevented = variance caught on invoices that were actually flagged
   // (i.e. the amount that would have overpaid a vendor had it gone through).
@@ -24,16 +30,21 @@ export default async function ReportsPage() {
     .reduce((sum, d) => sum + d.variance, 0);
 
   const noPoCount = discrepancies.filter((d) => !d.poAmount).length;
-  const priceOnly = discrepancies.filter((d) => d.poAmount && d.status !== "Matched").length;
+  const priceOnly = discrepancies.filter(
+    (d) => d.poAmount && d.status !== "Matched",
+  ).length;
   const totalFlags = noPoCount + priceOnly || 1;
 
   return (
     <div className="p-8 space-y-6 max-w-7xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-display font-bold text-[var(--text-primary)]">Operational Reports</h1>
+          <h1 className="text-2xl font-display font-bold text-[var(--text-primary)]">
+            Operational Reports
+          </h1>
           <p className="text-xs text-[var(--text-secondary)]">
-            Financial exposure summaries, variance leakage, and reconciliation throughput.
+            Financial exposure summaries, variance leakage, and reconciliation
+            throughput.
           </p>
         </div>
         <button className="px-3 py-1.5 text-xs rounded-md border border-[var(--border-color)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-alt)] inline-flex items-center gap-1.5 font-medium">
@@ -44,53 +55,88 @@ export default async function ReportsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="p-5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] space-y-1">
           <div className="flex items-center justify-between text-[var(--text-muted)]">
-            <span className="text-[10px] font-mono uppercase">Prevented Leakage</span>
+            <span className="text-[10px] font-mono uppercase">
+              Prevented Leakage
+            </span>
             <DollarSign className="w-4 h-4 text-[var(--success)]" />
           </div>
           <div className="text-2xl font-display font-bold text-[var(--text-primary)]">
-            ${preventedLeakage.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+            $
+            {preventedLeakage.toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+            })}
           </div>
-          <div className="text-[10px] text-[var(--text-muted)] font-mono">Caught before payment</div>
+          <div className="text-[10px] text-[var(--text-muted)] font-mono">
+            Caught before payment
+          </div>
         </div>
 
         <div className="p-5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] space-y-1">
           <div className="flex items-center justify-between text-[var(--text-muted)]">
-            <span className="text-[10px] font-mono uppercase">Discrepancy Rate</span>
+            <span className="text-[10px] font-mono uppercase">
+              Discrepancy Rate
+            </span>
             <AlertOctagon className="w-4 h-4 text-[var(--danger)]" />
           </div>
-          <div className="text-2xl font-display font-bold text-[var(--text-primary)]">{discrepancyRate.toFixed(1)}%</div>
-          <div className="text-[10px] text-[var(--text-muted)] font-mono">{flagged} of {totalInvoices} invoices flagged</div>
+          <div className="text-2xl font-display font-bold text-[var(--text-primary)]">
+            {discrepancyRate.toFixed(1)}%
+          </div>
+          <div className="text-[10px] text-[var(--text-muted)] font-mono">
+            {flagged} of {totalInvoices} invoices flagged
+          </div>
         </div>
 
         <div className="p-5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] space-y-1">
           <div className="flex items-center justify-between text-[var(--text-muted)]">
-            <span className="text-[10px] font-mono uppercase">Businesses Tracked</span>
+            <span className="text-[10px] font-mono uppercase">
+              Businesses Tracked
+            </span>
             <TrendingUp className="w-4 h-4 text-[var(--color-primary)]" />
           </div>
-          <div className="text-2xl font-display font-bold text-[var(--text-primary)]">{businessCount}</div>
-          <div className="text-[10px] text-[var(--text-muted)] font-mono">In this environment</div>
+          <div className="text-2xl font-display font-bold text-[var(--text-primary)]">
+            {businessCount}
+          </div>
+          <div className="text-[10px] text-[var(--text-muted)] font-mono">
+            In this environment
+          </div>
         </div>
       </div>
 
       <div className="p-6 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] space-y-4">
-        <h2 className="text-sm font-semibold text-[var(--text-primary)]">Variance Breakdown by Category</h2>
+        <h2 className="text-sm font-semibold text-[var(--text-primary)]">
+          Variance Breakdown by Category
+        </h2>
         <div className="space-y-3 font-mono text-xs">
           <div>
             <div className="flex justify-between text-xs mb-1">
-              <span className="text-[var(--text-secondary)]">Price Discrepancy (vs PO baseline)</span>
-              <span className="font-bold text-[var(--danger)]">{Math.round((priceOnly / totalFlags) * 100)}%</span>
+              <span className="text-[var(--text-secondary)]">
+                Price Discrepancy (vs PO baseline)
+              </span>
+              <span className="font-bold text-[var(--danger)]">
+                {Math.round((priceOnly / totalFlags) * 100)}%
+              </span>
             </div>
             <div className="w-full bg-[var(--bg-surface-alt)] h-2 rounded-full overflow-hidden">
-              <div className="bg-[var(--danger)] h-full" style={{ width: `${(priceOnly / totalFlags) * 100}%` }} />
+              <div
+                className="bg-[var(--danger)] h-full"
+                style={{ width: `${(priceOnly / totalFlags) * 100}%` }}
+              />
             </div>
           </div>
           <div>
             <div className="flex justify-between text-xs mb-1">
-              <span className="text-[var(--text-secondary)]">Unmatched Purchase Orders</span>
-              <span className="font-bold text-[var(--warning)]">{Math.round((noPoCount / totalFlags) * 100)}%</span>
+              <span className="text-[var(--text-secondary)]">
+                Unmatched Purchase Orders
+              </span>
+              <span className="font-bold text-[var(--warning)]">
+                {Math.round((noPoCount / totalFlags) * 100)}%
+              </span>
             </div>
             <div className="w-full bg-[var(--bg-surface-alt)] h-2 rounded-full overflow-hidden">
-              <div className="bg-[var(--warning)] h-full" style={{ width: `${(noPoCount / totalFlags) * 100}%` }} />
+              <div
+                className="bg-[var(--warning)] h-full"
+                style={{ width: `${(noPoCount / totalFlags) * 100}%` }}
+              />
             </div>
           </div>
         </div>

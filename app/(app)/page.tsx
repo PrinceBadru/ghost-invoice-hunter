@@ -10,31 +10,50 @@ export default async function CommandCenterDashboard() {
   const user = await requireUser();
   const environmentId = user.environmentId;
 
-  const [totalInvoices, matchedInvoices, discrepancyCount, pendingReview, priorityQueue, latestDiscrepancy] =
-    await Promise.all([
-      prisma.document.count({ where: { environmentId, type: "INVOICE" } }),
-      prisma.document.count({ where: { environmentId, type: "INVOICE", status: "Matched" } }),
-      prisma.document.count({
-        where: { environmentId, type: "INVOICE", status: { in: ["Needs Review", "Discrepancy"] } },
-      }),
-      prisma.document.count({ where: { environmentId, type: "INVOICE", status: "Needs Review" } }),
-      prisma.document.findMany({
-        where: { environmentId, type: "INVOICE", status: { in: ["Needs Review", "Discrepancy"] } },
-        include: {
-          business: true,
-          discrepancies: { orderBy: { createdAt: "desc" }, take: 1 },
-        },
-        orderBy: { createdAt: "desc" },
-        take: 3,
-      }),
-      prisma.discrepancy.findFirst({
-        where: { environmentId, status: { in: ["Needs Review", "Discrepancy"] } },
-        orderBy: { createdAt: "desc" },
-        include: { invoiceDoc: { include: { business: true } } },
-      }),
-    ]);
+  const [
+    totalInvoices,
+    matchedInvoices,
+    discrepancyCount,
+    pendingReview,
+    priorityQueue,
+    latestDiscrepancy,
+  ] = await Promise.all([
+    prisma.document.count({ where: { environmentId, type: "INVOICE" } }),
+    prisma.document.count({
+      where: { environmentId, type: "INVOICE", status: "Matched" },
+    }),
+    prisma.document.count({
+      where: {
+        environmentId,
+        type: "INVOICE",
+        status: { in: ["Needs Review", "Discrepancy"] },
+      },
+    }),
+    prisma.document.count({
+      where: { environmentId, type: "INVOICE", status: "Needs Review" },
+    }),
+    prisma.document.findMany({
+      where: {
+        environmentId,
+        type: "INVOICE",
+        status: { in: ["Needs Review", "Discrepancy"] },
+      },
+      include: {
+        business: true,
+        discrepancies: { orderBy: { createdAt: "desc" }, take: 1 },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 3,
+    }),
+    prisma.discrepancy.findFirst({
+      where: { environmentId, status: { in: ["Needs Review", "Discrepancy"] } },
+      orderBy: { createdAt: "desc" },
+      include: { invoiceDoc: { include: { business: true } } },
+    }),
+  ]);
 
-  const reconciledRate = totalInvoices > 0 ? (matchedInvoices / totalInvoices) * 100 : 0;
+  const reconciledRate =
+    totalInvoices > 0 ? (matchedInvoices / totalInvoices) * 100 : 0;
 
   const featured = priorityQueue[0];
   const featuredDiscrepancy = featured?.discrepancies[0];
@@ -66,31 +85,62 @@ export default async function CommandCenterDashboard() {
 
       <section className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {[
-          { label: "Total Volume", value: totalInvoices.toLocaleString(), detail: "Invoices on file" },
-          { label: "Reconciled Rate", value: `${reconciledRate.toFixed(1)}%`, detail: "Matched within tolerance" },
-          { label: "Discrepancies", value: String(discrepancyCount), detail: "Requires attention", highlight: discrepancyCount > 0 },
-          { label: "Pending Review", value: String(pendingReview), detail: "Needs a second look" },
+          {
+            label: "Total Volume",
+            value: totalInvoices.toLocaleString(),
+            detail: "Invoices on file",
+          },
+          {
+            label: "Reconciled Rate",
+            value: `${reconciledRate.toFixed(1)}%`,
+            detail: "Matched within tolerance",
+          },
+          {
+            label: "Discrepancies",
+            value: String(discrepancyCount),
+            detail: "Requires attention",
+            highlight: discrepancyCount > 0,
+          },
+          {
+            label: "Pending Review",
+            value: String(pendingReview),
+            detail: "Needs a second look",
+          },
         ].map((metric, i) => (
           <div
             key={i}
             className={`p-4 rounded-xl border bg-[var(--bg-surface)] ${
-              metric.highlight ? "border-[var(--danger)]" : "border-[var(--border-color)]"
+              metric.highlight
+                ? "border-[var(--danger)]"
+                : "border-[var(--border-color)]"
             }`}
           >
-            <span className="text-xs text-[var(--text-muted)] uppercase tracking-wider">{metric.label}</span>
-            <div className={`text-3xl font-display font-semibold mt-1 ${metric.highlight ? "text-[var(--danger)]" : "text-[var(--text-primary)]"}`}>
+            <span className="text-xs text-[var(--text-muted)] uppercase tracking-wider">
+              {metric.label}
+            </span>
+            <div
+              className={`text-3xl font-display font-semibold mt-1 ${metric.highlight ? "text-[var(--danger)]" : "text-[var(--text-primary)]"}`}
+            >
               {metric.value}
             </div>
-            <span className="text-xs text-[var(--text-secondary)] mt-1 block">{metric.detail}</span>
+            <span className="text-xs text-[var(--text-secondary)] mt-1 block">
+              {metric.detail}
+            </span>
           </div>
         ))}
       </section>
 
       {featured && featuredDiscrepancy ? (
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-[var(--text-primary)]">Active Flagged Reconciliation</h2>
+          <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+            Active Flagged Reconciliation
+          </h2>
           <ReconciliationCard
-            quoteAmount={featuredDiscrepancy.quoteAmount ?? featuredDiscrepancy.poAmount ?? featured.totalAmount}
+            quoteAmount={
+              featuredDiscrepancy.quoteAmount ??
+              featuredDiscrepancy.poAmount ??
+              featured.totalAmount
+            }
             poAmount={featuredDiscrepancy.poAmount ?? featured.totalAmount}
             invoiceAmount={featured.totalAmount}
           />
@@ -120,7 +170,10 @@ export default async function CommandCenterDashboard() {
               <tbody className="divide-y divide-[var(--border-color)] font-mono">
                 {priorityQueue.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="p-4 text-center text-[var(--text-muted)] font-sans">
+                    <td
+                      colSpan={5}
+                      className="p-4 text-center text-[var(--text-muted)] font-sans"
+                    >
                       Nothing flagged. Upload invoices to get started.
                     </td>
                   </tr>
@@ -130,23 +183,38 @@ export default async function CommandCenterDashboard() {
                   return (
                     <tr key={inv.id}>
                       <td className="p-3 font-medium">
-                        <Link href={`/invoices/${inv.id}`} className="hover:underline text-[var(--color-primary)]">
+                        <Link
+                          href={`/invoices/${inv.id}`}
+                          className="hover:underline text-[var(--color-primary)]"
+                        >
                           {inv.reference}
                         </Link>
                       </td>
-                      <td className="p-3 font-sans text-[var(--text-primary)]">{inv.business.name}</td>
+                      <td className="p-3 font-sans text-[var(--text-primary)]">
+                        {inv.business.name}
+                      </td>
                       <td className="p-3 text-right">
-                        ${inv.totalAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                        $
+                        {inv.totalAmount.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                        })}
                       </td>
                       <td
                         className={`p-3 text-right ${
-                          d && d.variancePercent > 0 ? "text-[var(--danger)]" : "text-[var(--success)]"
+                          d && d.variancePercent > 0
+                            ? "text-[var(--danger)]"
+                            : "text-[var(--success)]"
                         }`}
                       >
-                        {d ? `${d.variancePercent >= 0 ? "+" : ""}${d.variancePercent.toFixed(2)}%` : "—"}
+                        {d
+                          ? `${d.variancePercent >= 0 ? "+" : ""}${d.variancePercent.toFixed(2)}%`
+                          : "—"}
                       </td>
                       <td className="p-3 font-sans">
-                        <StatusBadge status={inv.status} severity={d?.severity} />
+                        <StatusBadge
+                          status={inv.status}
+                          severity={d?.severity}
+                        />
                       </td>
                     </tr>
                   );
@@ -168,7 +236,9 @@ export default async function CommandCenterDashboard() {
               actionHref={`/invoices/${latestDiscrepancy.invoiceDocId}`}
             />
           ) : (
-            <p className="text-xs text-[var(--text-muted)]">No insights yet — nothing has been flagged.</p>
+            <p className="text-xs text-[var(--text-muted)]">
+              No insights yet — nothing has been flagged.
+            </p>
           )}
         </section>
       </div>

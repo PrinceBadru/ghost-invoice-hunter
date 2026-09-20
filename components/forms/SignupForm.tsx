@@ -46,14 +46,19 @@ export function SignupForm() {
       >
         <div className="flex items-center gap-2 justify-center pb-2">
           <Ghost className="w-5 h-5 text-[var(--color-primary)]" />
-          <span className="font-display font-bold text-[var(--text-primary)]">New Environment</span>
+          <span className="font-display font-bold text-[var(--text-primary)]">
+            New Environment
+          </span>
         </div>
         <p className="text-xs text-[var(--text-secondary)] text-center -mt-2">
-          This creates a closed environment and its master account. Nothing inside it will ever be shared with another environment.
+          This creates a closed environment and its master account. Nothing
+          inside it will ever be shared with another environment.
         </p>
 
         <div className="space-y-1">
-          <label className="text-xs font-medium text-[var(--text-secondary)]">Business / environment name</label>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">
+            Business / environment name
+          </label>
           <input
             required
             value={environmentName}
@@ -63,7 +68,9 @@ export function SignupForm() {
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-medium text-[var(--text-secondary)]">Your name</label>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">
+            Your name
+          </label>
           <input
             required
             value={name}
@@ -73,7 +80,9 @@ export function SignupForm() {
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-medium text-[var(--text-secondary)]">Email</label>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">
+            Email
+          </label>
           <input
             type="email"
             required
@@ -84,7 +93,9 @@ export function SignupForm() {
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-medium text-[var(--text-secondary)]">Password</label>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">
+            Password
+          </label>
           <input
             type="password"
             required
@@ -107,7 +118,10 @@ export function SignupForm() {
 
         <p className="text-xs text-center text-[var(--text-secondary)]">
           Already have an account?{" "}
-          <Link href="/login" className="text-[var(--color-primary)] font-medium hover:underline">
+          <Link
+            href="/login"
+            className="text-[var(--color-primary)] font-medium hover:underline"
+          >
             Sign in
           </Link>
         </p>

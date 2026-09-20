@@ -17,15 +17,23 @@ export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => null);
   const parsed = schema.safeParse(body);
   if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Invalid input" }, { status: 400 });
+    return NextResponse.json(
+      { error: parsed.error.issues[0]?.message ?? "Invalid input" },
+      { status: 400 },
+    );
   }
   const { environmentName, name, email, password } = parsed.data;
 
   const normalizedEmail = email.toLowerCase();
 
-  const existing = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+  const existing = await prisma.user.findUnique({
+    where: { email: normalizedEmail },
+  });
   if (existing) {
-    return NextResponse.json({ error: "An account with that email already exists" }, { status: 409 });
+    return NextResponse.json(
+      { error: "An account with that email already exists" },
+      { status: 409 },
+    );
   }
 
   const passwordHash = await hashPassword(password);
@@ -35,7 +43,12 @@ export async function POST(req: NextRequest) {
       data: {
         name: environmentName,
         users: {
-          create: { name, email: normalizedEmail, passwordHash, role: "MASTER" },
+          create: {
+            name,
+            email: normalizedEmail,
+            passwordHash,
+            role: "MASTER",
+          },
         },
       },
       include: { users: true },

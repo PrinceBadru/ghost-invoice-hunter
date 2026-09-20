@@ -2,9 +2,20 @@ import React from "react";
 import { CheckCircle2, AlertTriangle, XCircle, Loader2 } from "lucide-react";
 import type { DocStatus, Severity } from "@/lib/types";
 
-const STATUS_STYLES: Record<string, { bg: string; fg: string; icon: React.ElementType }> = {
-  Matched: { bg: "var(--success-soft)", fg: "var(--success)", icon: CheckCircle2 },
-  "Needs Review": { bg: "var(--warning-soft)", fg: "var(--warning)", icon: AlertTriangle },
+const STATUS_STYLES: Record<
+  string,
+  { bg: string; fg: string; icon: React.ElementType }
+> = {
+  Matched: {
+    bg: "var(--success-soft)",
+    fg: "var(--success)",
+    icon: CheckCircle2,
+  },
+  "Needs Review": {
+    bg: "var(--warning-soft)",
+    fg: "var(--warning)",
+    icon: AlertTriangle,
+  },
   Discrepancy: { bg: "var(--danger-soft)", fg: "var(--danger)", icon: XCircle },
   Processing: { bg: "var(--info-soft)", fg: "var(--info)", icon: Loader2 },
   Failed: { bg: "var(--danger-soft)", fg: "var(--danger)", icon: XCircle },

@@ -11,15 +11,18 @@ export function AuditLogClient({ logs }: { logs: AuditEntry[] }) {
     (log) =>
       log.action.toLowerCase().includes(search.toLowerCase()) ||
       log.user.toLowerCase().includes(search.toLowerCase()) ||
-      (log.reason && log.reason.toLowerCase().includes(search.toLowerCase()))
+      (log.reason && log.reason.toLowerCase().includes(search.toLowerCase())),
   );
 
   return (
     <div className="p-8 space-y-6 max-w-7xl mx-auto">
       <div>
-        <h1 className="text-2xl font-display font-bold text-[var(--text-primary)]">Audit Log</h1>
+        <h1 className="text-2xl font-display font-bold text-[var(--text-primary)]">
+          Audit Log
+        </h1>
         <p className="text-xs text-[var(--text-secondary)]">
-          Historical system trail tracking user actions, automated flags, and approvals — scoped to this environment only.
+          Historical system trail tracking user actions, automated flags, and
+          approvals — scoped to this environment only.
         </p>
       </div>
 
@@ -35,17 +38,23 @@ export function AuditLogClient({ logs }: { logs: AuditEntry[] }) {
           />
         </div>
         <div className="text-xs font-mono text-[var(--text-muted)] flex items-center gap-1.5">
-          <Shield className="w-3.5 h-3.5 text-[var(--success)]" /> Environment-scoped
+          <Shield className="w-3.5 h-3.5 text-[var(--success)]" />{" "}
+          Environment-scoped
         </div>
       </div>
 
       <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] overflow-hidden">
         <div className="divide-y divide-[var(--border-color)]">
           {filteredLogs.length === 0 && (
-            <div className="p-6 text-center text-xs text-[var(--text-muted)]">No activity yet.</div>
+            <div className="p-6 text-center text-xs text-[var(--text-muted)]">
+              No activity yet.
+            </div>
           )}
           {filteredLogs.map((log) => (
-            <div key={log.id} className="p-4 hover:bg-[var(--bg-surface-alt)] transition-colors space-y-1.5">
+            <div
+              key={log.id}
+              className="p-4 hover:bg-[var(--bg-surface-alt)] transition-colors space-y-1.5"
+            >
               <div className="flex items-center justify-between font-mono text-xs">
                 <div className="flex items-center gap-2">
                   <span className="font-semibold text-[var(--text-primary)] inline-flex items-center gap-1">
@@ -53,16 +62,24 @@ export function AuditLogClient({ logs }: { logs: AuditEntry[] }) {
                     {log.user}
                   </span>
                   <span className="text-[var(--text-muted)]">•</span>
-                  <span className="text-[var(--text-secondary)]">{log.action}</span>
+                  <span className="text-[var(--text-secondary)]">
+                    {log.action}
+                  </span>
                 </div>
                 <span className="text-[var(--text-muted)]">{log.time}</span>
               </div>
 
-              {log.detail && <p className="text-xs text-[var(--text-secondary)] pl-5">{log.detail}</p>}
+              {log.detail && (
+                <p className="text-xs text-[var(--text-secondary)] pl-5">
+                  {log.detail}
+                </p>
+              )}
 
               {log.reason && (
                 <div className="ml-5 p-2 rounded bg-[var(--bg-surface-alt)] border border-[var(--border-color)] font-mono text-[11px] text-[var(--text-muted)]">
-                  <span className="font-semibold text-[var(--text-primary)]">Reason: </span>
+                  <span className="font-semibold text-[var(--text-primary)]">
+                    Reason:{" "}
+                  </span>
                   {log.reason}
                 </div>
               )}

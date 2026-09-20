@@ -4,7 +4,11 @@ import { Sidebar } from "@/components/navigation/Sidebar";
 // Everything under the (app) route group requires an authenticated user
 // and gets the Sidebar chrome. /login and /signup live outside this group
 // so they render without it.
-export default async function AppLayout({ children }: { children: React.ReactNode }) {
+export default async function AppLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const user = await requireUser();
 
   return (

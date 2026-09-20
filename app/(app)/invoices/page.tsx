@@ -8,7 +8,10 @@ export default async function InvoicesPage() {
 
   const docs = await prisma.document.findMany({
     where: { environmentId: user.environmentId, type: "INVOICE" },
-    include: { business: true, discrepancies: { orderBy: { createdAt: "desc" }, take: 1 } },
+    include: {
+      business: true,
+      discrepancies: { orderBy: { createdAt: "desc" }, take: 1 },
+    },
     orderBy: { createdAt: "desc" },
   });
 

@@ -16,9 +16,24 @@ async function main() {
       toleranceThreshold: 5.0,
       users: {
         create: [
-          { name: "Sarah K.", email: "sarah@acme.test", passwordHash, role: "MASTER" },
-          { name: "Jane A.", email: "jane@acme.test", passwordHash, role: "ADMIN" },
-          { name: "Bob V.", email: "bob@acme.test", passwordHash, role: "VIEWER" },
+          {
+            name: "Sarah K.",
+            email: "sarah@acme.test",
+            passwordHash,
+            role: "MASTER",
+          },
+          {
+            name: "Jane A.",
+            email: "jane@acme.test",
+            passwordHash,
+            role: "ADMIN",
+          },
+          {
+            name: "Bob V.",
+            email: "bob@acme.test",
+            passwordHash,
+            role: "VIEWER",
+          },
         ],
       },
     },
@@ -37,13 +52,25 @@ async function main() {
   });
 
   const acmeLogistics = await prisma.business.create({
-    data: { name: "Acme Logistics", vendorCode: "VEN-1001", environmentId: environment.id },
+    data: {
+      name: "Acme Logistics",
+      vendorCode: "VEN-1001",
+      environmentId: environment.id,
+    },
   });
   const globalTech = await prisma.business.create({
-    data: { name: "Global Tech Inc", vendorCode: "VEN-1002", environmentId: environment.id },
+    data: {
+      name: "Global Tech Inc",
+      vendorCode: "VEN-1002",
+      environmentId: environment.id,
+    },
   });
   const vertexCloud = await prisma.business.create({
-    data: { name: "Vertex Cloud Services", vendorCode: "VEN-1003", environmentId: environment.id },
+    data: {
+      name: "Vertex Cloud Services",
+      vendorCode: "VEN-1003",
+      environmentId: environment.id,
+    },
   });
 
   // --- Acme Logistics: PO -> Invoice with a price discrepancy ---
@@ -57,7 +84,16 @@ async function main() {
       environmentId: environment.id,
       businessId: acmeLogistics.id,
       uploadedById: master.id,
-      lineItems: { create: [{ description: "Freight services — Q3", quantity: 1, unitPrice: 12000, amount: 12000 }] },
+      lineItems: {
+        create: [
+          {
+            description: "Freight services — Q3",
+            quantity: 1,
+            unitPrice: 12000,
+            amount: 12000,
+          },
+        ],
+      },
     },
   });
   await prisma.document.create({
@@ -70,7 +106,16 @@ async function main() {
       environmentId: environment.id,
       businessId: acmeLogistics.id,
       uploadedById: master.id,
-      lineItems: { create: [{ description: "Freight services — Q3", quantity: 1, unitPrice: 12000, amount: 12000 }] },
+      lineItems: {
+        create: [
+          {
+            description: "Freight services — Q3",
+            quantity: 1,
+            unitPrice: 12000,
+            amount: 12000,
+          },
+        ],
+      },
     },
   });
   const inv1 = await prisma.document.create({
@@ -85,7 +130,16 @@ async function main() {
       environmentId: environment.id,
       businessId: acmeLogistics.id,
       uploadedById: david.id,
-      lineItems: { create: [{ description: "Freight services — Q3", quantity: 1, unitPrice: 12850, amount: 12850 }] },
+      lineItems: {
+        create: [
+          {
+            description: "Freight services — Q3",
+            quantity: 1,
+            unitPrice: 12850,
+            amount: 12850,
+          },
+        ],
+      },
     },
   });
   await evaluateInvoice(inv1.id);
@@ -101,7 +155,16 @@ async function main() {
       environmentId: environment.id,
       businessId: globalTech.id,
       uploadedById: master.id,
-      lineItems: { create: [{ description: "Cloud subscription", quantity: 1, unitPrice: 4100, amount: 4100 }] },
+      lineItems: {
+        create: [
+          {
+            description: "Cloud subscription",
+            quantity: 1,
+            unitPrice: 4100,
+            amount: 4100,
+          },
+        ],
+      },
     },
   });
   const inv2 = await prisma.document.create({
@@ -115,7 +178,16 @@ async function main() {
       environmentId: environment.id,
       businessId: globalTech.id,
       uploadedById: david.id,
-      lineItems: { create: [{ description: "Cloud subscription", quantity: 1, unitPrice: 4185, amount: 4185 }] },
+      lineItems: {
+        create: [
+          {
+            description: "Cloud subscription",
+            quantity: 1,
+            unitPrice: 4185,
+            amount: 4185,
+          },
+        ],
+      },
     },
   });
   await evaluateInvoice(inv2.id);
@@ -131,7 +203,16 @@ async function main() {
       environmentId: environment.id,
       businessId: vertexCloud.id,
       uploadedById: master.id,
-      lineItems: { create: [{ description: "Managed hosting", quantity: 1, unitPrice: 8230, amount: 8230 }] },
+      lineItems: {
+        create: [
+          {
+            description: "Managed hosting",
+            quantity: 1,
+            unitPrice: 8230,
+            amount: 8230,
+          },
+        ],
+      },
     },
   });
   const inv3 = await prisma.document.create({
@@ -145,7 +226,16 @@ async function main() {
       environmentId: environment.id,
       businessId: vertexCloud.id,
       uploadedById: david.id,
-      lineItems: { create: [{ description: "Managed hosting", quantity: 1, unitPrice: 8230, amount: 8230 }] },
+      lineItems: {
+        create: [
+          {
+            description: "Managed hosting",
+            quantity: 1,
+            unitPrice: 8230,
+            amount: 8230,
+          },
+        ],
+      },
     },
   });
   await evaluateInvoice(inv3.id);

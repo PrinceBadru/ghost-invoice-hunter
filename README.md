@@ -6,7 +6,7 @@ Multi-environment invoice discrepancy reconciliation app.
 
 - Each **User** belongs to exactly one **Environment** (a closed silo — nothing
   is shared or queried across environments).
-- A **Business** is tracked *inside* an environment (a department, or an
+- A **Business** is tracked _inside_ an environment (a department, or an
   outside company whose invoices are processed there).
 - A master account creates the environment on signup, then creates other
   users directly inside it (`ADMIN` / `UPLOADER` / `VIEWER` roles).
@@ -23,6 +23,7 @@ The easiest way to deploy and run the app is using Docker:
 ```bash
 docker-compose up -d --build
 ```
+
 The app will be available at http://localhost:3001 with a persistent SQLite database.
 
 ### Local Development
@@ -37,6 +38,7 @@ npm run dev
 ```
 
 Then visit http://localhost:3001. Either:
+
 - **Sign up** to create your own environment, or
 - Log in with the seeded demo account: `sarah@acme.test` / `password123`
 

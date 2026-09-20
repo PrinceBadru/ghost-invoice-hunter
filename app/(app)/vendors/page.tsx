@@ -8,7 +8,10 @@ export default async function VendorsPage() {
   const businesses = await prisma.business.findMany({
     where: { environmentId: user.environmentId },
     include: {
-      documents: { where: { type: "INVOICE" }, select: { totalAmount: true, status: true } },
+      documents: {
+        where: { type: "INVOICE" },
+        select: { totalAmount: true, status: true },
+      },
     },
     orderBy: { name: "asc" },
   });
@@ -16,9 +19,12 @@ export default async function VendorsPage() {
   return (
     <div className="p-8 space-y-6 max-w-7xl mx-auto">
       <div>
-        <h1 className="text-2xl font-display font-bold text-[var(--text-primary)]">Vendors</h1>
+        <h1 className="text-2xl font-display font-bold text-[var(--text-primary)]">
+          Vendors
+        </h1>
         <p className="text-xs text-[var(--text-secondary)]">
-          Businesses tracked in this environment, discrepancy risk, and historical billing volume.
+          Businesses tracked in this environment, discrepancy risk, and
+          historical billing volume.
         </p>
       </div>
 
@@ -30,8 +36,13 @@ export default async function VendorsPage() {
         )}
         {businesses.map((vendor) => {
           const invoiceCount = vendor.documents.length;
-          const totalVolume = vendor.documents.reduce((acc, d) => acc + d.totalAmount, 0);
-          const discrepancies = vendor.documents.filter((d) => d.status !== "Matched" && d.status !== "Processing").length;
+          const totalVolume = vendor.documents.reduce(
+            (acc, d) => acc + d.totalAmount,
+            0,
+          );
+          const discrepancies = vendor.documents.filter(
+            (d) => d.status !== "Matched" && d.status !== "Processing",
+          ).length;
 
           return (
             <div
@@ -40,8 +51,12 @@ export default async function VendorsPage() {
             >
               <div className="flex justify-between items-start">
                 <div>
-                  <h2 className="font-semibold text-sm text-[var(--text-primary)]">{vendor.name}</h2>
-                  <span className="text-[10px] font-mono text-[var(--text-muted)]">{vendor.vendorCode}</span>
+                  <h2 className="font-semibold text-sm text-[var(--text-primary)]">
+                    {vendor.name}
+                  </h2>
+                  <span className="text-[10px] font-mono text-[var(--text-muted)]">
+                    {vendor.vendorCode}
+                  </span>
                 </div>
                 {discrepancies > 0 ? (
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--danger-soft)] text-[var(--danger)]">
@@ -56,13 +71,22 @@ export default async function VendorsPage() {
 
               <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-2 border-t border-[var(--border-color)]">
                 <div>
-                  <div className="text-[10px] text-[var(--text-muted)] uppercase">Invoices</div>
-                  <div className="text-[var(--text-primary)]">{invoiceCount} processed</div>
+                  <div className="text-[10px] text-[var(--text-muted)] uppercase">
+                    Invoices
+                  </div>
+                  <div className="text-[var(--text-primary)]">
+                    {invoiceCount} processed
+                  </div>
                 </div>
                 <div>
-                  <div className="text-[10px] text-[var(--text-muted)] uppercase">Total Volume</div>
+                  <div className="text-[10px] text-[var(--text-muted)] uppercase">
+                    Total Volume
+                  </div>
                   <div className="font-semibold text-[var(--text-primary)]">
-                    ${totalVolume.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                    $
+                    {totalVolume.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}
                   </div>
                 </div>
               </div>

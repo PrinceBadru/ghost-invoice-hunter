@@ -88,8 +88,12 @@ export function Sidebar({
 
       <div className="p-3 border-t border-[var(--border-color)] space-y-2">
         <div className="px-2">
-          <div className="text-xs font-semibold text-[var(--text-primary)] truncate">{userName}</div>
-          <div className="text-[10px] font-mono text-[var(--text-muted)]">{userRole}</div>
+          <div className="text-xs font-semibold text-[var(--text-primary)] truncate">
+            {userName}
+          </div>
+          <div className="text-[10px] font-mono text-[var(--text-muted)]">
+            {userRole}
+          </div>
         </div>
         <button
           onClick={handleLogout}
