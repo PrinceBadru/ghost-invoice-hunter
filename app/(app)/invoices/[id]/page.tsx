@@ -42,7 +42,7 @@ export default async function InvoiceDetailPage({
     : null;
 
   return (
-    <div className="p-8 space-y-6 max-w-5xl mx-auto">
+    <div className="p-4 md:p-8 space-y-6 max-w-5xl mx-auto">
       <Link
         href="/invoices"
         className="inline-flex items-center gap-1.5 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
@@ -95,7 +95,8 @@ export default async function InvoiceDetailPage({
             Invoice line items
           </h2>
           <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] overflow-hidden">
-            <table className="w-full text-left text-xs">
+            <div className="w-full overflow-x-auto pb-4">
+<table className="w-full text-left text-xs">
               <thead className="bg-[var(--bg-surface-alt)] text-[var(--text-muted)] font-mono">
                 <tr>
                   <th className="p-2 font-medium">Item</th>
@@ -122,6 +123,7 @@ export default async function InvoiceDetailPage({
                 ))}
               </tbody>
             </table>
+</div>
           </div>
         </div>
 
@@ -131,7 +133,8 @@ export default async function InvoiceDetailPage({
           </h2>
           {po ? (
             <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] overflow-hidden">
-              <table className="w-full text-left text-xs">
+              <div className="w-full overflow-x-auto pb-4">
+<table className="w-full text-left text-xs">
                 <thead className="bg-[var(--bg-surface-alt)] text-[var(--text-muted)] font-mono">
                   <tr>
                     <th className="p-2 font-medium">Item</th>
@@ -158,6 +161,7 @@ export default async function InvoiceDetailPage({
                   ))}
                 </tbody>
               </table>
+</div>
             </div>
           ) : (
             <p className="text-xs text-[var(--text-muted)] p-4 rounded-xl border border-dashed border-[var(--border-color)]">

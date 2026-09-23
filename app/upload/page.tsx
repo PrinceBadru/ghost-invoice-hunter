@@ -21,7 +21,7 @@ export default async function UploadPage() {
         userName={user.name}
         userRole={user.role}
       />
-      <main className="flex-1 overflow-y-auto p-8 space-y-6 max-w-7xl mx-auto">
+      <main className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
         <div>
           <h1 className="text-2xl font-display font-bold text-[var(--text-primary)]">
             Process Invoices

@@ -26,7 +26,7 @@ export default async function PurchaseOrdersPage() {
     invoiceByPoRef.set(`${m.businessId}:${m.linkedPoRef}`, m.reference);
 
   return (
-    <div className="p-8 space-y-6 max-w-7xl mx-auto">
+    <div className="p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
       <div>
         <h1 className="text-2xl font-display font-bold text-[var(--text-primary)]">
           Purchase Orders
@@ -38,7 +38,8 @@ export default async function PurchaseOrdersPage() {
 
       <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs">
+          <div className="w-full overflow-x-auto pb-4">
+<table className="w-full text-left border-collapse text-xs">
             <thead>
               <tr className="border-b border-[var(--border-color)] bg-[var(--bg-surface-alt)] text-[var(--text-muted)] font-mono">
                 <th className="p-3 font-medium">PO NUMBER</th>
@@ -93,6 +94,7 @@ export default async function PurchaseOrdersPage() {
               })}
             </tbody>
           </table>
+</div>
         </div>
       </div>
     </div>

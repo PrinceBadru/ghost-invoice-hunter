@@ -6,7 +6,7 @@ export default async function SettingsPage() {
   const user = await requireUser();
 
   return (
-    <div className="p-8 space-y-8 max-w-4xl mx-auto">
+    <div className="p-4 md:p-8 space-y-8 max-w-4xl mx-auto">
       <div>
         <h1 className="text-2xl font-display font-bold text-[var(--text-primary)]">
           Settings

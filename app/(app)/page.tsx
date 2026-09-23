@@ -59,7 +59,7 @@ export default async function CommandCenterDashboard() {
   const featuredDiscrepancy = featured?.discrepancies[0];
 
   return (
-    <div className="min-h-screen p-8 space-y-8 max-w-7xl mx-auto">
+    <div className="min-h-screen p-4 md:p-8 space-y-8 max-w-7xl mx-auto">
       <header className="flex justify-between items-center pb-6 border-b border-[var(--border-color)]">
         <div>
           <h1 className="text-3xl font-bold font-display tracking-tight text-[var(--text-primary)]">
@@ -157,7 +157,8 @@ export default async function CommandCenterDashboard() {
           </div>
 
           <div className="border border-[var(--border-color)] rounded-xl overflow-hidden bg-[var(--bg-surface)]">
-            <table className="w-full text-left text-xs">
+            <div className="w-full overflow-x-auto pb-4">
+<table className="w-full text-left text-xs">
               <thead className="bg-[var(--bg-surface-alt)] border-b border-[var(--border-color)] text-[var(--text-muted)] uppercase">
                 <tr>
                   <th className="p-3 font-mono">Invoice #</th>
@@ -221,6 +222,7 @@ export default async function CommandCenterDashboard() {
                 })}
               </tbody>
             </table>
+</div>
           </div>
         </section>
 
