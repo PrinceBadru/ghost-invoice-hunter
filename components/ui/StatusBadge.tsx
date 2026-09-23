@@ -11,12 +11,18 @@ const STATUS_STYLES: Record<
     fg: "var(--success)",
     icon: CheckCircle2,
   },
+  Resolved: {
+    bg: "var(--success-soft)",
+    fg: "var(--success)",
+    icon: CheckCircle2,
+  },
   "Needs Review": {
     bg: "var(--warning-soft)",
     fg: "var(--warning)",
     icon: AlertTriangle,
   },
   Discrepancy: { bg: "var(--danger-soft)", fg: "var(--danger)", icon: XCircle },
+  Rejected: { bg: "var(--danger-soft)", fg: "var(--danger)", icon: XCircle },
   Processing: { bg: "var(--info-soft)", fg: "var(--info)", icon: Loader2 },
   Failed: { bg: "var(--danger-soft)", fg: "var(--danger)", icon: XCircle },
 };

@@ -5,6 +5,7 @@ import { requireUser } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ReconciliationCard } from "@/components/reconciliation/ReconciliationCard";
+import { InvoiceActions } from "@/components/invoices/InvoiceActions";
 
 export default async function InvoiceDetailPage({
   params,
@@ -61,8 +62,24 @@ export default async function InvoiceDetailPage({
             {invoice.createdAt.toISOString().slice(0, 10)}
           </p>
         </div>
-        <StatusBadge status={invoice.status} severity={discrepancy?.severity} />
+        <div className="flex items-center gap-3">
+          <StatusBadge status={invoice.status} severity={discrepancy?.severity} />
+          {(invoice.status === "Needs Review" || invoice.status === "Discrepancy") && (
+            <InvoiceActions invoiceId={invoice.id} />
+          )}
+        </div>
       </div>
+
+      {discrepancy?.resolutionNote && (
+        <div className="p-4 rounded-xl border border-[var(--success)] bg-[var(--success-soft)] space-y-1">
+          <div className="text-xs font-semibold text-[var(--success)]">
+            Resolution Note
+          </div>
+          <p className="text-xs text-[var(--text-secondary)]">
+            {discrepancy.resolutionNote}
+          </p>
+        </div>
+      )}
 
       {discrepancy && (
         <ReconciliationCard
@@ -114,7 +131,7 @@ export default async function InvoiceDetailPage({
                       {li.quantity}
                     </td>
                     <td className="p-2 text-right font-mono text-[var(--text-primary)]">
-                      $
+                      UGX 
                       {li.amount.toLocaleString("en-US", {
                         minimumFractionDigits: 2,
                       })}
@@ -152,7 +169,7 @@ export default async function InvoiceDetailPage({
                         {li.quantity}
                       </td>
                       <td className="p-2 text-right font-mono text-[var(--text-primary)]">
-                        $
+                        UGX 
                         {li.amount.toLocaleString("en-US", {
                           minimumFractionDigits: 2,
                         })}

@@ -112,8 +112,9 @@ model Discrepancy {
   variance        Float
   variancePercent Float
   severity        String   // Low | Medium | High
-  status          String   // Matched | Needs Review | Discrepancy
+  status          String   // Matched | Needs Review | Discrepancy | Resolved
   reasons         String   // JSON-encoded string[]
+  resolutionNote  String?
   score           Int      @default(0)
   createdAt       DateTime @default(now())
 
