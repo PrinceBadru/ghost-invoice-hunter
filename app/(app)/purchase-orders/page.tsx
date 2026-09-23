@@ -76,7 +76,7 @@ export default async function PurchaseOrdersPage() {
                       {po.business.name}
                     </td>
                     <td className="p-3 text-right font-mono font-semibold text-[var(--text-primary)]">
-                      $
+                      UGX 
                       {po.totalAmount.toLocaleString("en-US", {
                         minimumFractionDigits: 2,
                       })}

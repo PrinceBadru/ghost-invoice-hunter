@@ -83,7 +83,7 @@ export default async function VendorsPage() {
                     Total Volume
                   </div>
                   <div className="font-semibold text-[var(--text-primary)]">
-                    $
+                    UGX 
                     {totalVolume.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
                     })}

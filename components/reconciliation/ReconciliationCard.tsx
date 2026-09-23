@@ -43,7 +43,7 @@ export function ReconciliationCard({
             <div className="flex justify-between text-xs font-mono">
               <span className="text-[var(--text-secondary)]">{row.label}</span>
               <span className="font-semibold text-[var(--text-primary)]">
-                $
+                UGX 
                 {row.value.toLocaleString("en-US", {
                   minimumFractionDigits: 2,
                 })}

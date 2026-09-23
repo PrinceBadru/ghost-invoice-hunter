@@ -61,7 +61,7 @@ export default async function ReportsPage() {
             <DollarSign className="w-4 h-4 text-[var(--success)]" />
           </div>
           <div className="text-2xl font-display font-bold text-[var(--text-primary)]">
-            $
+            UGX 
             {preventedLeakage.toLocaleString("en-US", {
               minimumFractionDigits: 2,
             })}

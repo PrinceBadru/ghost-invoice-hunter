@@ -89,7 +89,7 @@ export default async function DiscrepanciesPage() {
                   </div>
                   <div className="text-[var(--text-secondary)]">
                     {poAmount !== null && poAmount !== undefined
-                      ? `$${poAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })}`
+                      ? `UGX ${poAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })}`
                       : "No PO found"}
                   </div>
                 </div>
@@ -98,7 +98,7 @@ export default async function DiscrepanciesPage() {
                     Invoice Total
                   </div>
                   <div className="font-semibold text-[var(--text-primary)]">
-                    $
+                    UGX 
                     {inv.totalAmount.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
                     })}

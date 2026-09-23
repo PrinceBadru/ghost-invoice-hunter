@@ -58,7 +58,7 @@ export default async function QuotesPage() {
                     {q.business.name}
                   </td>
                   <td className="p-3 text-right font-mono font-semibold text-[var(--text-primary)]">
-                    $
+                    UGX 
                     {q.totalAmount.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
                     })}
