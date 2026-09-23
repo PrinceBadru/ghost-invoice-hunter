@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
       environmentId: currentUser.environmentId,
       userId: currentUser.id,
       action: `Uploaded ${type.replace("_", " ").toLowerCase()} ${reference}`,
-      detail: `${parsed.rows.length} line item(s), total $${parsed.total.toFixed(2)}`,
+      detail: `${parsed.rows.length} line item(s), total UGX ${parsed.total.toFixed(2)}`,
     },
   });
 

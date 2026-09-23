@@ -110,7 +110,7 @@ export default async function DiscrepanciesPage() {
                   </div>
                   <div className="font-bold text-[var(--danger)]">
                     {poAmount !== null && poAmount !== undefined
-                      ? `${variance >= 0 ? "+" : ""}$${variance.toLocaleString("en-US", { minimumFractionDigits: 2 })}`
+                      ? `${variance >= 0 ? "+" : ""}UGX ${variance.toLocaleString("en-US", { minimumFractionDigits: 2 })}`
                       : "—"}
                   </div>
                 </div>

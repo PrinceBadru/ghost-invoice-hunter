@@ -280,7 +280,7 @@ export function UploadForm({ businesses }: { businesses: BusinessOption[] }) {
         <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] space-y-2">
           <div className="flex items-center gap-2 text-sm font-medium text-[var(--text-primary)]">
             <CheckCircle2 className="w-4 h-4 text-[var(--success)]" />
-            Parsed {result.rowCount} line item(s) — total $
+            Parsed {result.rowCount} line item(s) — total UGX 
             {result.total.toLocaleString("en-US", { minimumFractionDigits: 2 })}
           </div>
           <div className="text-xs text-[var(--text-secondary)]">

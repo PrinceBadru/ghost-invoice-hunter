@@ -109,13 +109,13 @@ export function InvoicesClient({ invoices }: { invoices: InvoiceRecord[] }) {
                     {inv.invoiceDate}
                   </td>
                   <td className="p-3 text-right font-mono text-[var(--text-secondary)]">
-                    $
+                    UGX 
                     {inv.poAmount.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
                     })}
                   </td>
                   <td className="p-3 text-right font-mono font-semibold text-[var(--text-primary)]">
-                    $
+                    UGX 
                     {inv.invoiceAmount.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
                     })}

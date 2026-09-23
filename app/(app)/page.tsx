@@ -195,7 +195,7 @@ export default async function CommandCenterDashboard() {
                         {inv.business.name}
                       </td>
                       <td className="p-3 text-right">
-                        $
+                        UGX 
                         {inv.totalAmount.toLocaleString("en-US", {
                           minimumFractionDigits: 2,
                         })}

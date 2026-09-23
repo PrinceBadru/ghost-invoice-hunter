@@ -68,7 +68,7 @@ export function ReconciliationCard({
         <span
           className={`font-bold ${flagged ? "text-[var(--danger)]" : "text-[var(--success)]"}`}
         >
-          {variance >= 0 ? "+" : ""}$
+          {variance >= 0 ? "+" : ""}UGX 
           {variance.toLocaleString("en-US", { minimumFractionDigits: 2 })} (
           {variancePercent.toFixed(2)}%)
         </span>
