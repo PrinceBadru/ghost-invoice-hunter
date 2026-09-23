@@ -6,7 +6,7 @@ import { SESSION_COOKIE, verifySession } from "@/lib/auth";
 // and the auth API itself.
 const PUBLIC_PATHS = ["/login", "/signup"];
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (PUBLIC_PATHS.includes(pathname) || pathname.startsWith("/api/auth")) {

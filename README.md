@@ -16,24 +16,28 @@ Multi-environment invoice discrepancy reconciliation app.
 
 ## Getting started
 
-### Run with Docker (Recommended)
+### Deployment (Vercel & Supabase)
 
-The easiest way to deploy and run the app is using Docker:
+The easiest way to deploy this application is using Vercel for the frontend and Supabase (PostgreSQL) for the database.
 
-```bash
-docker-compose up -d --build
-```
-
-The app will be available at <http://localhost:3001>
-with a persistent SQLite database.
+1. **Database Setup**:
+   - Create a new Supabase project.
+   - Get your PostgreSQL connection strings (Connection Pooling for the App and Direct Connection for Prisma).
+2. **Environment Variables**:
+   - Set `DATABASE_URL` and `DIRECT_URL` in your Vercel project settings using your Supabase connection strings.
+   - Set `JWT_SECRET` to a random, secure string.
+3. **Deployment**:
+   - Import your repository into Vercel.
+   - Vercel is configured via `vercel.json` to use `npm ci --legacy-peer-deps` for installation.
+   - Ensure you run database migrations against your Supabase project by locally executing `npm run db:migrate`.
 
 ### Local Development
 
-If you prefer running without Docker:
+To run the application locally with your Supabase database:
 
 ```bash
 npm install
-npm run db:push      # creates dev.db (SQLite) from prisma/schema.prisma
+npm run db:push      # pushes the Prisma schema to your PostgreSQL database
 npm run db:seed      # optional — adds a demo environment + sample data
 npm run dev
 ```
@@ -52,8 +56,7 @@ Then visit <http://localhost:3001>. Either:
 - File upload (.xlsx / .csv) → parsing → line items → document totals
 - Discrepancy matching engine (invoice vs PO vs quote, tolerance-based)
 - All pages wired to the real database (no more mock data)
-- Full Docker & Docker Compose deployment support with persistent
-  SQLite storage
+- Full Vercel & Supabase deployment support with PostgreSQL storage
 
 ## Deliberately simplified for this pass (see build plan for next steps)
 
