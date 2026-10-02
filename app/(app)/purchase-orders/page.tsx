@@ -1,6 +1,6 @@
 import { FileCheck } from "lucide-react";
-import { requireUser } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
+import { requireUser } from "@/lib/session";
 
 export default async function PurchaseOrdersPage() {
   const user = await requireUser();

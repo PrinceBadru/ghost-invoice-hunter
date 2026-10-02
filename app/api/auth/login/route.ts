@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { comparePassword, SESSION_COOKIE, signSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { comparePassword, signSession, SESSION_COOKIE } from "@/lib/auth";
 
 const schema = z.object({
   email: z.string().email(),

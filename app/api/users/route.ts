@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { hashPassword } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/session";
-import { hashPassword } from "@/lib/auth";
 import { ROLES_THAT_CAN_MANAGE_USERS } from "@/lib/types";
 
 // A master/admin account creates a user directly bound to ITS OWN

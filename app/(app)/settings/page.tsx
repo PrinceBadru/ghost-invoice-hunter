@@ -1,6 +1,6 @@
+import { SettingsForm } from "@/components/forms/SettingsForm";
 import { requireUser } from "@/lib/session";
 import { ROLES_THAT_CAN_MANAGE_SETTINGS } from "@/lib/types";
-import { SettingsForm } from "@/components/forms/SettingsForm";
 
 export default async function SettingsPage() {
   const user = await requireUser();

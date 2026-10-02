@@ -1,5 +1,5 @@
-import { SignJWT, jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
+import { jwtVerify, SignJWT } from "jose";
 
 // Kept dependency-light and edge-runtime compatible (uses `jose`, not
 // `jsonwebtoken`) because this file is imported from middleware.ts, which

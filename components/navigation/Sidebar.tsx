@@ -1,25 +1,25 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
 import {
-  LayoutDashboard,
-  FileText,
-  ShoppingCart,
-  Quote,
   AlertTriangle,
-  Building2,
   BarChart3,
-  Users,
-  History,
-  Settings,
-  Upload,
-  LogOut,
+  Building2,
+  FileText,
   Ghost,
+  History,
+  LayoutDashboard,
+  LogOut,
   Menu,
+  Quote,
+  Settings,
+  ShoppingCart,
+  Upload,
+  Users,
   X,
 } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 const NAV_ITEMS = [
   { href: "/", label: "Command Center", icon: LayoutDashboard },

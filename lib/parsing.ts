@@ -1,4 +1,5 @@
 import * as XLSX from "xlsx";
+import Decimal from "decimal.js";
 
 export interface ParsedRow {
   description: string;
@@ -10,23 +11,18 @@ export interface ParsedRow {
 export interface ParsedDocument {
   rows: ParsedRow[];
   total: number;
+  errors: string[];
 }
 
 /**
  * Parses an uploaded .xlsx or .csv file into normalized line items.
- *
- * Businesses rarely agree on column names, so this reads the first sheet
- * and heuristically matches common header variants (description/item,
- * quantity/qty, unitPrice/price, amount/total). If a spreadsheet uses
- * something wildly different, rows still come through with best-effort
- * defaults rather than failing the whole upload — flagging genuinely
- * unparseable files is a good next iteration once real business data
- * shows which formats actually show up (see Phase 00/11 of the build plan).
+ * Enforces strict column mapping, decimal accuracy, and row validation.
  */
 export function parseSpreadsheet(buffer: Buffer): ParsedDocument {
+  const errors: string[] = [];
   const workbook = XLSX.read(buffer, { type: "buffer" });
   const sheetName = workbook.SheetNames[0];
-  if (!sheetName) return { rows: [], total: 0 };
+  if (!sheetName) return { rows: [], total: 0, errors: ["Spreadsheet is empty"] };
 
   const sheet = workbook.Sheets[sheetName];
   const json: Record<string, unknown>[] = XLSX.utils.sheet_to_json(sheet, {
@@ -40,54 +36,60 @@ export function parseSpreadsheet(buffer: Buffer): ParsedDocument {
     return undefined;
   };
 
-  const rows: ParsedRow[] = json.map((row) => {
+  const rows: ParsedRow[] = [];
+  let totalAmount = new Decimal(0);
+
+  json.forEach((row, index) => {
+    const rowNum = index + 2; // Assuming header is row 1
+    
     const description = String(
-      pick(row, [
-        "description",
-        "Description",
-        "item",
-        "Item",
-        "Item Description",
-      ]) ?? "Line item",
-    );
+      pick(row, ["description", "Description", "item", "Item", "Item Description"]) ?? "",
+    ).trim();
 
-    let rawQty = pick(row, ["quantity", "Quantity", "qty", "Qty"]);
+    if (!description) {
+      errors.push(`Row ${rowNum}: Missing description or item name.`);
+      return;
+    }
+
+    const rawQty = pick(row, ["quantity", "Quantity", "qty", "Qty"]);
     let quantity = Number(rawQty);
-    if (isNaN(quantity)) quantity = 1;
-    if (rawQty === undefined || rawQty === null || rawQty === "") quantity = 1;
-
-    let rawPrice = pick(row, [
-      "unitPrice",
-      "Unit Price",
-      "unit_price",
-      "price",
-      "Price",
-    ]);
-    let unitPrice = Number(rawPrice);
-    if (isNaN(unitPrice)) unitPrice = 0;
-
-    let rawAmount = pick(row, [
-      "amount",
-      "Amount",
-      "total",
-      "Total",
-      "Line Total",
-    ]);
-    let amount = Number(rawAmount);
-    if (isNaN(amount)) amount = 0;
-
-    // Only compute if amount isn't explicitly provided but we have qty and price
-    if (!amount && quantity && unitPrice) {
-      amount = quantity * unitPrice;
-    }
-    // If we have amount and qty but no unit price, derive it
-    if (!unitPrice && quantity && amount) {
-      unitPrice = amount / quantity;
+    if (isNaN(quantity) || quantity <= 0) {
+      errors.push(`Row ${rowNum}: Missing or invalid quantity.`);
+      return;
     }
 
-    return { description, quantity, unitPrice, amount };
+    const rawPrice = pick(row, ["unitPrice", "Unit Price", "unit_price", "price", "Price"]);
+    const unitPriceStr = rawPrice !== undefined ? String(rawPrice).replace(/,/g, '') : null;
+    let unitPrice = unitPriceStr ? Number(unitPriceStr) : null;
+
+    const rawAmount = pick(row, ["amount", "Amount", "total", "Total", "Line Total"]);
+    const amountStr = rawAmount !== undefined ? String(rawAmount).replace(/,/g, '') : null;
+    let amount = amountStr ? Number(amountStr) : null;
+
+    // Strict validation: we must be able to derive amount or unit price
+    if (amount === null && unitPrice !== null) {
+      amount = new Decimal(quantity).times(unitPrice).toNumber();
+    } else if (unitPrice === null && amount !== null) {
+      unitPrice = new Decimal(amount).dividedBy(quantity).toNumber();
+    }
+
+    if (amount === null || isNaN(amount) || unitPrice === null || isNaN(unitPrice)) {
+      errors.push(`Row ${rowNum}: Missing or invalid price/amount.`);
+      return;
+    }
+
+    const preciseAmount = new Decimal(amount).toDecimalPlaces(2).toNumber();
+    const preciseUnitPrice = new Decimal(unitPrice).toDecimalPlaces(2).toNumber();
+
+    rows.push({
+      description,
+      quantity,
+      unitPrice: preciseUnitPrice,
+      amount: preciseAmount,
+    });
+
+    totalAmount = totalAmount.plus(preciseAmount);
   });
 
-  const total = rows.reduce((sum, r) => sum + r.amount, 0);
-  return { rows, total };
+  return { rows, total: totalAmount.toNumber(), errors };
 }

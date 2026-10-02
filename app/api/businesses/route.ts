@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/session";
+import { requireApiRole } from "@/lib/session";
 
 // Businesses tracked inside the caller's environment — departments, or
 // outside companies whose invoices are processed here. Never a separate
@@ -12,15 +12,8 @@ const schema = z.object({
 });
 
 export async function POST(req: NextRequest) {
-  const currentUser = await getCurrentUser();
-  if (!currentUser)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (currentUser.role !== "MASTER" && currentUser.role !== "ADMIN") {
-    return NextResponse.json(
-      { error: "Forbidden: You do not have permission to create businesses." },
-      { status: 403 },
-    );
-  }
+  const { user: currentUser, error } = await requireApiRole(["MASTER", "ADMIN"]);
+  if (error) return error;
 
   const body = await req.json().catch(() => null);
   const parsed = schema.safeParse(body);

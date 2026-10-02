@@ -1,7 +1,7 @@
-import { requireUser } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
 import { Sidebar } from "@/components/navigation/Sidebar";
 import { UploadForm } from "@/components/upload/UploadForm";
+import { prisma } from "@/lib/prisma";
+import { requireUser } from "@/lib/session";
 
 // Lives outside the (app) route group so it can be reached even before any
 // businesses exist, but still requires auth (middleware covers that) and

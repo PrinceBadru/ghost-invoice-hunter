@@ -1,6 +1,6 @@
-import { DollarSign, AlertOctagon, TrendingUp, Download } from "lucide-react";
-import { requireUser } from "@/lib/session";
+import { AlertOctagon, DollarSign, Download, TrendingUp } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { requireUser } from "@/lib/session";
 
 export default async function ReportsPage() {
   const user = await requireUser();

@@ -1,7 +1,7 @@
-import { requireUser } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
-import { toInvoiceRecord } from "@/lib/present";
 import { InvoicesClient } from "@/components/invoices/InvoicesClient";
+import { toInvoiceRecord } from "@/lib/present";
+import { prisma } from "@/lib/prisma";
+import { requireUser } from "@/lib/session";
 
 export default async function InvoicesPage() {
   const user = await requireUser();

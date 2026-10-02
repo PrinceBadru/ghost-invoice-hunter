@@ -1,8 +1,8 @@
 import { UserCheck } from "lucide-react";
-import { requireUser } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
-import { ROLES_THAT_CAN_MANAGE_USERS } from "@/lib/types";
 import { AddUserForm } from "@/components/forms/AddUserForm";
+import { prisma } from "@/lib/prisma";
+import { requireUser } from "@/lib/session";
+import { ROLES_THAT_CAN_MANAGE_USERS } from "@/lib/types";
 
 export default async function TeamPage() {
   const user = await requireUser();

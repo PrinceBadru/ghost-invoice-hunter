@@ -1,6 +1,6 @@
-import { requireUser } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
 import { AuditLogClient } from "@/components/audit/AuditLogClient";
+import { prisma } from "@/lib/prisma";
+import { requireUser } from "@/lib/session";
 import type { AuditEntry } from "@/lib/types";
 
 export default async function AuditLogPage() {

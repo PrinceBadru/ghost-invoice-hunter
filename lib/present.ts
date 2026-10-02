@@ -40,3 +40,12 @@ export function toInvoiceRecord(doc: {
     scoreReasons: d ? JSON.parse(d.reasons) : [],
   };
 }
+
+export function formatCurrency(amount: number, currencyCode: string = "UGX"): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: currencyCode,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount).replace(/\u00A0/, ' '); // Fallback for some spaces
+}

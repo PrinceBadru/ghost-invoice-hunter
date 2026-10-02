@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { AlertTriangle, Eye } from "lucide-react";
-import { requireUser } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
+import Link from "next/link";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { prisma } from "@/lib/prisma";
+import { requireUser } from "@/lib/session";
 
 export default async function DiscrepanciesPage() {
   const user = await requireUser();

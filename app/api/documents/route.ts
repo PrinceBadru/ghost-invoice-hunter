@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/session";
-import { parseSpreadsheet } from "@/lib/parsing";
 import { evaluateInvoice } from "@/lib/matching";
+import { parseSpreadsheet } from "@/lib/parsing";
+import { prisma } from "@/lib/prisma";
+import { requireApiRole } from "@/lib/session";
+import { formatCurrency } from "@/lib/present";
 
 // The core ingestion endpoint: accepts a multipart upload (an .xlsx or
 // .csv file, plus document metadata), parses it, stores the normalized
 // line items, and — if the document is an INVOICE — immediately runs the
 // discrepancy matching engine against any PO/quote already on file.
 export async function POST(req: NextRequest) {
-  const currentUser = await getCurrentUser();
-  if (!currentUser)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { user: currentUser, error } = await requireApiRole(["MASTER", "ADMIN", "UPLOADER"]);
+  if (error) return error;
 
   const formData = await req.formData();
   const file = formData.get("file");
@@ -60,9 +60,16 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  if (parsed.errors && parsed.errors.length > 0) {
+    return NextResponse.json(
+      { error: "Spreadsheet contains errors", details: parsed.errors },
+      { status: 400 },
+    );
+  }
+
   if (parsed.rows.length === 0) {
     return NextResponse.json(
-      { error: "No rows could be read from that file" },
+      { error: "No valid rows could be read from that file" },
       { status: 400 },
     );
   }
@@ -89,7 +96,7 @@ export async function POST(req: NextRequest) {
       environmentId: currentUser.environmentId,
       userId: currentUser.id,
       action: `Uploaded ${type.replace("_", " ").toLowerCase()} ${reference}`,
-      detail: `${parsed.rows.length} line item(s), total UGX ${parsed.total.toFixed(2)}`,
+      detail: `${parsed.rows.length} line item(s), total ${formatCurrency(parsed.total)}`,
     },
   });
 

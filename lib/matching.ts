@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import type { DocStatus, Severity } from "@/lib/types";
+import { formatCurrency } from "@/lib/present";
 
 const SEVERITY_HIGH = 15; // % variance
 const SEVERITY_MEDIUM = 8; // % variance
@@ -76,14 +77,14 @@ export async function evaluateInvoice(invoiceDocId: string) {
         abs > SEVERITY_HIGH ? "High" : abs > SEVERITY_MEDIUM ? "Medium" : "Low";
       score = Math.min(100, Math.round(abs * 4));
       reasons.push(
-        `Invoice total exceeds PO baseline by ${variancePercent.toFixed(2)}% (UGX ${variance.toFixed(2)})`,
+        `Invoice total exceeds PO baseline by ${variancePercent.toFixed(2)}% (${formatCurrency(variance)})`,
       );
     }
   }
 
   if (quote && po && Math.abs(quote.totalAmount - po.totalAmount) > 0.01) {
     reasons.push(
-      `PO baseline differs from the original quote by UGX ${(po.totalAmount - quote.totalAmount).toFixed(2)}`,
+      `PO baseline differs from the original quote by ${formatCurrency(po.totalAmount - quote.totalAmount)}`,
     );
   }
 

@@ -1,6 +1,6 @@
 import { CheckCircle2 } from "lucide-react";
-import { requireUser } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
+import { requireUser } from "@/lib/session";
 
 export default async function QuotesPage() {
   const user = await requireUser();

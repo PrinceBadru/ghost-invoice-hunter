@@ -1,5 +1,5 @@
+import { AlertTriangle, CheckCircle2, Loader2, XCircle } from "lucide-react";
 import React from "react";
-import { CheckCircle2, AlertTriangle, XCircle, Loader2 } from "lucide-react";
 import type { DocStatus, Severity } from "@/lib/types";
 
 const STATUS_STYLES: Record<

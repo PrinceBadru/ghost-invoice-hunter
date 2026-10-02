@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireUser } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
+import { requireApiRole } from "@/lib/session";
 
 export async function POST(
   req: NextRequest,
@@ -8,7 +8,8 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
-    const user = await requireUser();
+    const { user, error: authError } = await requireApiRole(["MASTER", "ADMIN"]);
+    if (authError) return authError;
     const { action, note } = await req.json();
 
     if (!action || !["RESOLVE", "REJECT"].includes(action)) {

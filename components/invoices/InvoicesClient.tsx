@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import { Eye, Filter, Search } from "lucide-react";
 import Link from "next/link";
+import React, { useState } from "react";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { Search, Filter, Eye } from "lucide-react";
 import type { InvoiceRecord } from "@/lib/types";
 
 export function InvoicesClient({ invoices }: { invoices: InvoiceRecord[] }) {

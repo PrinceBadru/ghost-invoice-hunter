@@ -1,5 +1,5 @@
-import { requireUser } from "@/lib/session";
 import { Sidebar } from "@/components/navigation/Sidebar";
+import { requireUser } from "@/lib/session";
 
 // Everything under the (app) route group requires an authenticated user
 // and gets the Sidebar chrome. /login and /signup live outside this group

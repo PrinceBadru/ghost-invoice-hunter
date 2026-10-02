@@ -1,6 +1,6 @@
-import React from "react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { Sparkles, ArrowRight } from "lucide-react";
+import React from "react";
 
 export function SystemInsight({
   title,

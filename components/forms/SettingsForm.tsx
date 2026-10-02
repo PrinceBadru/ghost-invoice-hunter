@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { Laptop, Moon, Palette, ShieldAlert, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { Sun, Moon, Laptop, Palette, ShieldAlert } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 const THEMES = [
   {

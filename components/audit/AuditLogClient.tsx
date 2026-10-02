@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
 import { Search, Shield, User } from "lucide-react";
+import React, { useState } from "react";
 import type { AuditEntry } from "@/lib/types";
 
 export function AuditLogClient({ logs }: { logs: AuditEntry[] }) {

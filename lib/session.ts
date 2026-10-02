@@ -1,8 +1,8 @@
 import "server-only";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
 import { SESSION_COOKIE, verifySession } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 // Server-only: reads the session cookie, verifies it, and loads the full
 // user + environment from the database. Safe to call from Server Components
@@ -28,4 +28,15 @@ export async function requireUser() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
   return user;
+}
+
+export async function requireApiRole(allowedRoles: string[]) {
+  const user = await getCurrentUser();
+  if (!user) {
+    return { error: new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { "Content-Type": "application/json" } }) };
+  }
+  if (!allowedRoles.includes(user.role)) {
+    return { error: new Response(JSON.stringify({ error: "Forbidden" }), { status: 403, headers: { "Content-Type": "application/json" } }) };
+  }
+  return { user };
 }

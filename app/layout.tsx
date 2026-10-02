@@ -1,4 +1,4 @@
-import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import "@/app/globals.css";
 

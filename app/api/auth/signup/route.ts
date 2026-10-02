@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { hashPassword, SESSION_COOKIE, signSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { hashPassword, signSession, SESSION_COOKIE } from "@/lib/auth";
 
 // Creates a brand-new closed environment plus its master account in one
 // step. This is the ONLY way an environment comes into existence — there
