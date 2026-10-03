@@ -1,69 +1,109 @@
 # Ghost Invoice Hunter 👻 🕵️‍♂️
 
-An agentic, multi-environment invoice discrepancy reconciliation engine.
+**Ghost Invoice Hunter is an agentic, multi-environment engine that automatically flags billing discrepancies across Purchase Orders, Quotes, and Invoices to protect your bottom line.**
 
-![Build Status](https://github.com/PrinceBadru/ghost-invoice-hunter/actions/workflows/ci.yml/badge.svg)
+[![CI Pipeline](https://github.com/PrinceBadru/ghost-invoice-hunter/actions/workflows/ci.yml/badge.svg)](https://github.com/PrinceBadru/ghost-invoice-hunter/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
 
-Ghost Invoice Hunter automatically ingests Purchase Orders, Quotes, and Invoices, parses their line items with strict validations, and executes a robust **line-level 3-way matching engine** to catch over-billing, missing items, pricing variances, and duplicate invoices before they drain your business.
+[![Try Live Demo](https://img.shields.io/badge/Live_Demo-Try_Now-success?style=for-the-badge&logo=vercel)](https://ghost-invoice-hunter.vercel.app)
 
-## 🚀 Key Features
+> **Demo Credentials:**
+> - **Email:** `sarah@acme.test`
+> - **Password:** `password123`
 
-- **Multi-Environment Silos**: Each user belongs to exactly one Environment. Data is strictly siloed—businesses tracked in one environment cannot be accessed by another.
-- **Role-Based Access Control (RBAC)**: Secure server-side guards enforcing `MASTER`, `ADMIN`, `UPLOADER`, and `VIEWER` permissions on mutational routes.
-- **Robust Spreadsheet Parsing**: Upload `.xlsx` or `.csv` files. The ingestion engine enforces strict column validations, generates granular row errors for malformed data, and leverages `decimal.js` for precise financial arithmetic.
-- **Line-Level 3-Way Matching Engine**: Deep discrepancy detection at the line-item level. Automatically flags:
-  - Quantity over-billed
-  - Unit price variances (above environment tolerance)
-  - Missing PO lines
-  - Unmatched Tax/Freight rows
-  - Duplicate invoice candidates
-- **Interactive Discrepancy UI**: Side-by-side visual document comparison highlighting offending line items in red. Includes an interactive resolution workflow (Resolve, Request Correction, or Reject) with full immutable audit logging.
-- **Continuous Integration**: Backed by Vitest for unit/component testing and GitHub Actions for CI.
+---
 
-## 🏗 Architecture
+## 📸 Product Preview
 
-- **Framework:** Next.js 16 (App Router) + React 19
-- **Styling:** Tailwind CSS (v4) with CSS Variables for dynamic themes
-- **Database:** PostgreSQL (via Supabase) with Prisma ORM
-- **Testing:** Vitest + React Testing Library
-- **Linting:** Biome
+| Dashboard & Overview | Discrepancy Highlighting | Interactive Resolution |
+|:---:|:---:|:---:|
+| ![Dashboard Screenshot](./public/screenshot-dashboard.png) <br> *A high-level view of all processed documents across the environment.* | ![Discrepancy Screenshot](./public/screenshot-discrepancy.png) <br> *Line-level 3-way matching flagging over-billed items in red.* | ![Resolution Screenshot](./public/screenshot-resolution.png) <br> *Actionable workflows to Request Correction or Reject invoices.* |
 
-## 🛠 Getting Started
+*(Note: Add screenshot images named `screenshot-dashboard.png`, `screenshot-discrepancy.png`, and `screenshot-resolution.png` to the `/public` folder).*
 
-### Deployment (Vercel & Supabase)
+---
 
-The easiest way to deploy this application is using Vercel for the frontend and Supabase (PostgreSQL) for the database.
+## 🏗 Architecture & Tenant Isolation
 
-1. **Database Setup**:
-   - Create a new Supabase project.
-   - Get your PostgreSQL connection strings.
-2. **Environment Variables**:
-   - Set `DATABASE_URL` (Connection Pooling) and `DIRECT_URL` (Direct Connection) in your Vercel project settings.
-   - Set `JWT_SECRET` to a random, secure string.
-3. **Deployment**:
-   - Import your repository into Vercel.
-   - Vercel is configured via `vercel.json` to use `npm ci --legacy-peer-deps` for installation.
-   - Ensure you run database migrations against your Supabase project by locally executing `npm run db:migrate`.
+```mermaid
+graph TD
+    A[User / Uploader] -->|Uploads XLSX/CSV| B(Next.js Server Actions)
+    B --> C{RBAC Guard}
+    C -->|Unauthorized| D[403 Forbidden]
+    C -->|Authorized| E[Parsing & Validation Engine]
+    E -->|Validates Columns| F[(PostgreSQL / Supabase)]
+    F -->|Triggers| G(Line-Level Matching Engine)
+    
+    subgraph Multi-Tenant Silo Architecture
+        G --> H[Environment A]
+        G --> I[Environment B]
+        H -.->|Strictly Isolated| I
+    end
+```
+
+### Security & Isolation Notes
+- **Strict Environment Silos:** Every user and business entity belongs to a single, isolated `Environment`. The database schema enforces that no data can be queried or joined across different environments.
+- **Role-Based Access Control (RBAC):** All mutating API routes and Server Actions are guarded by strict role verifications (`MASTER`, `ADMIN`, `UPLOADER`, `VIEWER`).
+
+---
+
+## 🔍 Line-Level Matching Examples
+
+The matching engine doesn't just look at total amounts; it inspects every individual line item for discrepancies.
+
+| Scenario | PO Value | Invoice Value | Outcome / Flag |
+|----------|----------|---------------|----------------|
+| **Perfect Match** | 10 Laptops @ $1000 | 10 Laptops @ $1000 | ✅ `Matched` (No variance) |
+| **Quantity Over-billed** | 5 Monitors | 7 Monitors | ❌ `Quantity over-billed on "Monitors"` |
+| **Price Variance** | $50 per Mouse | $65 per Mouse | ❌ `Unit price variance (exceeds tolerance)` |
+| **Missing PO Line** | - | $150 "Consulting" | ❌ `Missing PO line: Billed for "Consulting"` |
+| **Duplicate Invoice** | Invoice #123 on Jan 1 | Invoice #123 on Jan 1 | ❌ `Possible duplicate invoice detected` |
+
+---
+
+## 🚀 Getting Started
 
 ### Local Development
 
-To run the application locally:
-
-```bash
-npm install
-npm run db:push      # pushes the Prisma schema to your PostgreSQL database
-npm run db:seed      # optional — adds a demo environment + sample data
-npm run dev
-```
-
-Then visit <http://localhost:3001>. Either:
-
-- **Sign up** to create your own environment, or
-- Log in with the seeded demo account: `sarah@acme.test` / `password123`
+1. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
+2. **Setup Database (Requires PostgreSQL/Supabase):**
+   ```bash
+   # Push schema to DB and seed demo data
+   npm run db:push
+   npm run db:seed
+   ```
+3. **Run the App:**
+   ```bash
+   npm run dev
+   ```
+   Navigate to `http://localhost:3000` and login with the demo credentials above.
 
 ### Testing & Linting
 
 ```bash
-npm test             # Run Vitest test suite
+npm test             # Run the Vitest component & matching test suite
 npm run lint         # Run Biome linting & formatting checks
 ```
+
+---
+
+## 🔮 Limitations & Roadmap
+
+Ghost Invoice Hunter was built to be a robust foundation, but there are planned expansions for v2:
+- **Heuristic Column Mapping:** Currently expects specific column names in spreadsheets. A visual UI to map custom vendor column names to system fields is planned.
+- **Password Reset Flow:** Email verification and recovery flows will be added.
+- **OCR Integration:** Extracting line items directly from PDF invoices instead of relying on CSV/XLSX uploads.
+
+---
+
+## 🤝 Contributing & Contact
+
+We welcome PRs, bug reports, and feature requests! 
+- **Found a bug?** Please open an issue.
+- **Want to contribute?** Check out our Roadmap above and submit a Pull Request.
+
+For direct inquiries or support, please open an issue in this repository or contact the maintainer directly.
