@@ -89,21 +89,3 @@ npm test             # Run the Vitest component & matching test suite
 npm run lint         # Run Biome linting & formatting checks
 ```
 
----
-
-## 🔮 Limitations & Roadmap
-
-Ghost Invoice Hunter was built to be a robust foundation, but there are planned expansions for v2:
-- **Heuristic Column Mapping:** Currently expects specific column names in spreadsheets. A visual UI to map custom vendor column names to system fields is planned.
-- **Password Reset Flow:** Email verification and recovery flows will be added.
-- **OCR Integration:** Extracting line items directly from PDF invoices instead of relying on CSV/XLSX uploads.
-
----
-
-## 🤝 Contributing & Contact
-
-We welcome PRs, bug reports, and feature requests! 
-- **Found a bug?** Please open an issue.
-- **Want to contribute?** Check out our Roadmap above and submit a Pull Request.
-
-For direct inquiries or support, please open an issue in this repository or contact the maintainer directly.
