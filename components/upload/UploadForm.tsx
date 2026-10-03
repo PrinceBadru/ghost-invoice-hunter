@@ -29,6 +29,13 @@ export function UploadForm({ businesses }: { businesses: BusinessOption[] }) {
   const [linkedPoRef, setLinkedPoRef] = useState("");
   const [linkedQuoteRef, setLinkedQuoteRef] = useState("");
   const [documentDate, setDocumentDate] = useState("");
+
+  React.useEffect(() => {
+    const prefix = type === "INVOICE" ? "INV" : type === "PURCHASE_ORDER" ? "PO" : "QT";
+    const randomId = Math.random().toString(36).substring(2, 8).toUpperCase();
+    setReference(`${prefix}-${randomId}`);
+    setDocumentDate(new Date().toISOString().split("T")[0]);
+  }, [type]);
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
