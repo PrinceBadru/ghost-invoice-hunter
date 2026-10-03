@@ -1,20 +1,34 @@
-# Ghost Invoice Hunter
+# Ghost Invoice Hunter 👻 🕵️‍♂️
 
-Multi-environment invoice discrepancy reconciliation app.
+An agentic, multi-environment invoice discrepancy reconciliation engine.
 
-## Architecture
+![Build Status](https://github.com/PrinceBadru/ghost-invoice-hunter/actions/workflows/ci.yml/badge.svg)
 
-- Each **User** belongs to exactly one **Environment** (a closed silo — nothing
-  is shared or queried across environments).
-- A **Business** is tracked _inside_ an environment (a department, or an
-  outside company whose invoices are processed there).
-- A master account creates the environment on signup, then creates other
-  users directly inside it (`ADMIN` / `UPLOADER` / `VIEWER` roles).
-- Uploading a Purchase Order, Quote, or Invoice spreadsheet parses it,
-  stores normalized line items, and — for invoices — runs the discrepancy
-  matching engine immediately (`lib/matching.ts`).
+Ghost Invoice Hunter automatically ingests Purchase Orders, Quotes, and Invoices, parses their line items with strict validations, and executes a robust **line-level 3-way matching engine** to catch over-billing, missing items, pricing variances, and duplicate invoices before they drain your business.
 
-## Getting started
+## 🚀 Key Features
+
+- **Multi-Environment Silos**: Each user belongs to exactly one Environment. Data is strictly siloed—businesses tracked in one environment cannot be accessed by another.
+- **Role-Based Access Control (RBAC)**: Secure server-side guards enforcing `MASTER`, `ADMIN`, `UPLOADER`, and `VIEWER` permissions on mutational routes.
+- **Robust Spreadsheet Parsing**: Upload `.xlsx` or `.csv` files. The ingestion engine enforces strict column validations, generates granular row errors for malformed data, and leverages `decimal.js` for precise financial arithmetic.
+- **Line-Level 3-Way Matching Engine**: Deep discrepancy detection at the line-item level. Automatically flags:
+  - Quantity over-billed
+  - Unit price variances (above environment tolerance)
+  - Missing PO lines
+  - Unmatched Tax/Freight rows
+  - Duplicate invoice candidates
+- **Interactive Discrepancy UI**: Side-by-side visual document comparison highlighting offending line items in red. Includes an interactive resolution workflow (Resolve, Request Correction, or Reject) with full immutable audit logging.
+- **Continuous Integration**: Backed by Vitest for unit/component testing and GitHub Actions for CI.
+
+## 🏗 Architecture
+
+- **Framework:** Next.js 16 (App Router) + React 19
+- **Styling:** Tailwind CSS (v4) with CSS Variables for dynamic themes
+- **Database:** PostgreSQL (via Supabase) with Prisma ORM
+- **Testing:** Vitest + React Testing Library
+- **Linting:** Biome
+
+## 🛠 Getting Started
 
 ### Deployment (Vercel & Supabase)
 
@@ -22,9 +36,9 @@ The easiest way to deploy this application is using Vercel for the frontend and 
 
 1. **Database Setup**:
    - Create a new Supabase project.
-   - Get your PostgreSQL connection strings (Connection Pooling for the App and Direct Connection for Prisma).
+   - Get your PostgreSQL connection strings.
 2. **Environment Variables**:
-   - Set `DATABASE_URL` and `DIRECT_URL` in your Vercel project settings using your Supabase connection strings.
+   - Set `DATABASE_URL` (Connection Pooling) and `DIRECT_URL` (Direct Connection) in your Vercel project settings.
    - Set `JWT_SECRET` to a random, secure string.
 3. **Deployment**:
    - Import your repository into Vercel.
@@ -33,7 +47,7 @@ The easiest way to deploy this application is using Vercel for the frontend and 
 
 ### Local Development
 
-To run the application locally with your Supabase database:
+To run the application locally:
 
 ```bash
 npm install
@@ -44,31 +58,12 @@ npm run dev
 
 Then visit <http://localhost:3001>. Either:
 
-
 - **Sign up** to create your own environment, or
 - Log in with the seeded demo account: `sarah@acme.test` / `password123`
 
-## What's implemented
+### Testing & Linting
 
-- Auth (JWT in an httpOnly cookie), environment-scoped middleware
-- Environment signup (creates environment + master account)
-- Adding users within an environment (master/admin only)
-- Adding businesses tracked inside an environment
-- File upload (.xlsx / .csv) → parsing → line items → document totals
-- Discrepancy matching engine (invoice vs PO vs quote, tolerance-based)
-- All pages wired to the real database (no more mock data)
-- Full Vercel & Supabase deployment support with PostgreSQL storage
-
-## Deliberately simplified for this pass (see build plan for next steps)
-
-- Matching is done at the **document total** level, not
-  line-item level.
-  Line items are stored, so line-item-level matching is a targeted upgrade
-  later, not a schema change.
-- Spreadsheet column detection is heuristic (common header
-  name variants).
-  A stricter template or column-mapping UI is a good v2 addition once real
-  business spreadsheets show which formats actually show up.
-- No password reset / email verification flow yet.
-- No automated tests or CI yet — this pass was scoped
-  to "build the whole system first," per your request.
+```bash
+npm test             # Run Vitest test suite
+npm run lint         # Run Biome linting & formatting checks
+```
