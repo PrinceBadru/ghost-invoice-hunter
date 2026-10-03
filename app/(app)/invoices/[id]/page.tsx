@@ -6,6 +6,7 @@ import { ReconciliationCard } from "@/components/reconciliation/ReconciliationCa
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/session";
+import { formatCurrency } from "@/lib/present";
 
 export default async function InvoiceDetailPage({
   params,
@@ -122,22 +123,23 @@ export default async function InvoiceDetailPage({
                 </tr>
               </thead>
               <tbody className="divide-y divide-[var(--border-color)]">
-                {invoice.lineItems.map((li) => (
-                  <tr key={li.id}>
-                    <td className="p-2 text-[var(--text-primary)]">
-                      {li.description}
-                    </td>
-                    <td className="p-2 text-right font-mono text-[var(--text-secondary)]">
-                      {li.quantity}
-                    </td>
-                    <td className="p-2 text-right font-mono text-[var(--text-primary)]">
-                      UGX 
-                      {li.amount.toLocaleString("en-US", {
-                        minimumFractionDigits: 2,
-                      })}
-                    </td>
-                  </tr>
-                ))}
+                {invoice.lineItems.map((li) => {
+                  const isOffending = reasons.some((r) => r.includes(li.description));
+                  return (
+                    <tr key={li.id} className={isOffending ? "bg-[var(--danger-soft)]" : ""}>
+                      <td className={`p-2 ${isOffending ? "text-[var(--danger)] font-medium" : "text-[var(--text-primary)]"}`}>
+                        {li.description}
+                        {isOffending && <span className="ml-2 text-[10px] uppercase tracking-wider text-[var(--danger)]">Issue</span>}
+                      </td>
+                      <td className={`p-2 text-right font-mono ${isOffending ? "text-[var(--danger)] font-medium" : "text-[var(--text-secondary)]"}`}>
+                        {li.quantity}
+                      </td>
+                      <td className={`p-2 text-right font-mono ${isOffending ? "text-[var(--danger)] font-bold" : "text-[var(--text-primary)]"}`}>
+                        {formatCurrency(li.amount)}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
 </div>
@@ -169,10 +171,7 @@ export default async function InvoiceDetailPage({
                         {li.quantity}
                       </td>
                       <td className="p-2 text-right font-mono text-[var(--text-primary)]">
-                        UGX 
-                        {li.amount.toLocaleString("en-US", {
-                          minimumFractionDigits: 2,
-                        })}
+                        {formatCurrency(li.amount)}
                       </td>
                     </tr>
                   ))}

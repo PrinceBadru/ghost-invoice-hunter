@@ -1,4 +1,5 @@
 import React from "react";
+import { formatCurrency } from "@/lib/present";
 
 // Three-way visual comparison of quote → PO → invoice amounts, used on the
 // dashboard and on the invoice drill-down page.
@@ -43,10 +44,7 @@ export function ReconciliationCard({
             <div className="flex justify-between text-xs font-mono">
               <span className="text-[var(--text-secondary)]">{row.label}</span>
               <span className="font-semibold text-[var(--text-primary)]">
-                UGX 
-                {row.value.toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                })}
+                {formatCurrency(row.value)}
               </span>
             </div>
             <div className="w-full h-2 rounded-full bg-[var(--bg-surface-alt)] overflow-hidden">
@@ -68,8 +66,8 @@ export function ReconciliationCard({
         <span
           className={`font-bold ${flagged ? "text-[var(--danger)]" : "text-[var(--success)]"}`}
         >
-          {variance >= 0 ? "+" : ""}UGX 
-          {variance.toLocaleString("en-US", { minimumFractionDigits: 2 })} (
+          {variance >= 0 ? "+" : ""}
+          {formatCurrency(variance)} (
           {variancePercent.toFixed(2)}%)
         </span>
       </div>

@@ -7,12 +7,12 @@ import React, { useState } from "react";
 export function InvoiceActions({ invoiceId }: { invoiceId: string }) {
   const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
-  const [actionType, setActionType] = useState<"RESOLVE" | "REJECT" | null>(null);
+  const [actionType, setActionType] = useState<"RESOLVE" | "REJECT" | "REQUEST_CORRECTION" | null>(null);
   const [note, setNote] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleOpen = (type: "RESOLVE" | "REJECT") => {
+  const handleOpen = (type: "RESOLVE" | "REJECT" | "REQUEST_CORRECTION") => {
     setActionType(type);
     setModalOpen(true);
     setError("");
@@ -55,13 +55,20 @@ export function InvoiceActions({ invoiceId }: { invoiceId: string }) {
 
   return (
     <>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <button
           onClick={() => handleOpen("RESOLVE")}
           className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md bg-[var(--success-soft)] text-[var(--success)] border border-[var(--success)] hover:bg-[var(--success)] hover:text-white transition-colors"
         >
           <CheckCircle2 className="w-3.5 h-3.5" />
           Mark as Resolved
+        </button>
+        <button
+          onClick={() => handleOpen("REQUEST_CORRECTION")}
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md bg-[var(--warning-soft)] text-[var(--warning)] border border-[var(--warning)] hover:bg-[var(--warning)] hover:text-white transition-colors"
+        >
+          <XCircle className="w-3.5 h-3.5" />
+          Request Correction
         </button>
         <button
           onClick={() => handleOpen("REJECT")}
@@ -77,7 +84,7 @@ export function InvoiceActions({ invoiceId }: { invoiceId: string }) {
           <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-color)] shadow-xl w-full max-w-md overflow-hidden">
             <div className="p-4 border-b border-[var(--border-color)]">
               <h3 className="font-display font-semibold text-[var(--text-primary)]">
-                {actionType === "RESOLVE" ? "Resolve Discrepancy" : "Reject Invoice"}
+                {actionType === "RESOLVE" ? "Resolve Discrepancy" : actionType === "REJECT" ? "Reject Invoice" : "Request Correction"}
               </h3>
             </div>
             
@@ -93,7 +100,9 @@ export function InvoiceActions({ invoiceId }: { invoiceId: string }) {
                   placeholder={
                     actionType === "RESOLVE" 
                       ? "Explain how this discrepancy was cleared..." 
-                      : "Reason for rejection..."
+                      : actionType === "REJECT"
+                      ? "Reason for rejection..."
+                      : "Details of correction needed..."
                   }
                   className="w-full h-24 p-2 text-sm rounded-md border border-[var(--border-color)] bg-[var(--bg-surface-alt)] text-[var(--text-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--color-primary)]"
                 />
@@ -120,11 +129,13 @@ export function InvoiceActions({ invoiceId }: { invoiceId: string }) {
                   className={`px-4 py-2 text-xs font-medium rounded-md text-white transition-colors flex items-center gap-2 disabled:opacity-50 ${
                     actionType === "RESOLVE" 
                       ? "bg-[var(--success)] hover:bg-[var(--success)]/90" 
-                      : "bg-[var(--danger)] hover:bg-[var(--danger)]/90"
+                      : actionType === "REJECT" 
+                      ? "bg-[var(--danger)] hover:bg-[var(--danger)]/90"
+                      : "bg-[var(--warning)] hover:bg-[var(--warning)]/90 text-white"
                   }`}
                 >
                   {loading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                  {actionType === "RESOLVE" ? "Submit Resolution" : "Confirm Rejection"}
+                  {actionType === "RESOLVE" ? "Submit Resolution" : actionType === "REJECT" ? "Confirm Rejection" : "Send Request"}
                 </button>
               </div>
             </form>

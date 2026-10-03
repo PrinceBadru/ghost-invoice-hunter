@@ -21,6 +21,11 @@ const STATUS_STYLES: Record<
     fg: "var(--warning)",
     icon: AlertTriangle,
   },
+  "Correction Requested": {
+    bg: "var(--warning-soft)",
+    fg: "var(--warning)",
+    icon: AlertTriangle,
+  },
   Discrepancy: { bg: "var(--danger-soft)", fg: "var(--danger)", icon: XCircle },
   Rejected: { bg: "var(--danger-soft)", fg: "var(--danger)", icon: XCircle },
   Processing: { bg: "var(--info-soft)", fg: "var(--info)", icon: Loader2 },

@@ -12,9 +12,9 @@ export async function POST(
     if (authError) return authError;
     const { action, note } = await req.json();
 
-    if (!action || !["RESOLVE", "REJECT"].includes(action)) {
+    if (!action || !["RESOLVE", "REJECT", "REQUEST_CORRECTION"].includes(action)) {
       return NextResponse.json(
-        { error: "Invalid action. Must be RESOLVE or REJECT." },
+        { error: "Invalid action. Must be RESOLVE, REJECT, or REQUEST_CORRECTION." },
         { status: 400 }
       );
     }
@@ -35,7 +35,7 @@ export async function POST(
       return NextResponse.json({ error: "Document not found" }, { status: 404 });
     }
 
-    const newStatus = action === "RESOLVE" ? "Resolved" : "Rejected";
+    const newStatus = action === "RESOLVE" ? "Resolved" : action === "REJECT" ? "Rejected" : "Correction Requested";
 
     await prisma.$transaction(async (tx) => {
       // 1. Update the document status
@@ -54,11 +54,12 @@ export async function POST(
       });
 
       // 3. Log the action
+      const actionText = action === "RESOLVE" ? "Resolved" : action === "REJECT" ? "Rejected" : "Requested correction on";
       await tx.auditLog.create({
         data: {
           environmentId: user.environmentId,
           userId: user.id,
-          action: `${action === "RESOLVE" ? "Resolved" : "Rejected"} invoice ${doc.reference}`,
+          action: `${actionText} invoice ${doc.reference}`,
           detail: note,
           reason: `Manual override by ${user.name}`,
         },
