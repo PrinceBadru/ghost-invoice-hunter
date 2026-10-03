@@ -1,5 +1,5 @@
-import * as XLSX from "xlsx";
 import Decimal from "decimal.js";
+import * as XLSX from "xlsx";
 
 export interface ParsedRow {
   description: string;

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const mockCookiesGet = vi.fn()
 vi.mock('next/headers', () => ({
@@ -25,9 +25,9 @@ vi.mock('next/navigation', () => ({
   redirect: vi.fn(),
 }))
 
-import { requireApiRole } from '@/lib/session'
 import { verifySession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { requireApiRole } from '@/lib/session'
 
 describe('requireApiRole', () => {
   beforeEach(() => {

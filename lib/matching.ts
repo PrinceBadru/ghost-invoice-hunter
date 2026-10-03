@@ -1,7 +1,7 @@
+import Decimal from "decimal.js";
+import { formatCurrency } from "@/lib/present";
 import { prisma } from "@/lib/prisma";
 import type { DocStatus, Severity } from "@/lib/types";
-import { formatCurrency } from "@/lib/present";
-import Decimal from "decimal.js";
 
 const SEVERITY_HIGH = 15; // % variance for total or unit price
 const SEVERITY_MEDIUM = 8; // % variance

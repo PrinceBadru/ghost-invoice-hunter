@@ -4,9 +4,9 @@ import { notFound } from "next/navigation";
 import { InvoiceActions } from "@/components/invoices/InvoiceActions";
 import { ReconciliationCard } from "@/components/reconciliation/ReconciliationCard";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { formatCurrency } from "@/lib/present";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/session";
-import { formatCurrency } from "@/lib/present";
 
 export default async function InvoiceDetailPage({
   params,
